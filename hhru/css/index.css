@@ -51,7 +51,7 @@ body {
 
 .search__input {
     box-shadow: inset #D1D1D1 0 2px;
-    border: 0;
+    border: #D1D1D1 1px solid;
     padding: 6px 12px;
     border-radius: 4px;
 }
@@ -77,4 +77,18 @@ body {
 
 .monthpicker__month {
     font-weight: 500;
+}
+
+.schedule {
+    width: 100%;
+    margin-top: 12px;
+    border-spacing: 0;
+    border: 1px solid #F1F1F1;
+}
+
+.schedule__cell {
+    border: 1px solid #F1F1F1;
+    width: calc(100% / 7);
+    height: 125px;
+    padding: 8px;
 }
