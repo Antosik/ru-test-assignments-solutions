@@ -49,8 +49,16 @@ document.querySelector(".close-modal-button").addEventListener("click", e => {
   e.target.parentNode.classList.toggle("addeventfast--show");
 });
 
-document.querySelector(".addeventfast__close").addEventListener("click", e => {
+document.querySelector(".addeventfast__close").addEventListener("click", () => {
   document
     .querySelector(".addevent__button")
     .setAttribute("aria-pressed", "false");
 });
+
+document
+  .querySelector(".addeventfast__button")
+  .addEventListener("click", () => {
+    schedule.addEventFromString(
+      document.querySelector(".addeventfast__input").value
+    );
+  });

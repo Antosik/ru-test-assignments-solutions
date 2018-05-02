@@ -6,6 +6,8 @@ class Schedule {
     this.month = today.getMonth();
     this.year = today.getFullYear();
 
+    this.events = new Map();
+
     this.updateTable();
   }
 
@@ -56,6 +58,8 @@ class Schedule {
   updateTable() {
     this.container.innerHTML = "";
     const dates = this.getDatesToRender();
+    const eventsOnSchedule = this.getEventsOnSchedule();
+    console.log(eventsOnSchedule);
 
     const today = new Date();
     const todayCheck =
@@ -63,7 +67,14 @@ class Schedule {
 
     const tr = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
-      const cell = this.createCell(dates[j], { head: true, todayCheck });
+      const events = eventsOnSchedule.filter(
+        event => dates[j].toDateString() === event.date.toDateString()
+      );
+      const cell = this.createCell(dates[j], {
+        head: true,
+        todayCheck,
+        events
+      });
       tr.appendChild(cell);
     }
     this.container.appendChild(tr);
@@ -72,7 +83,10 @@ class Schedule {
       const tr = document.createElement("tr");
 
       for (let j = 0; j < 7; j++) {
-        const cell = this.createCell(dates[i * 7 + j], { todayCheck });
+        const events = eventsOnSchedule.filter(
+          event => dates[i * 7 + j].toDateString() === event.date.toDateString()
+        );
+        const cell = this.createCell(dates[i * 7 + j], { todayCheck, events });
         tr.appendChild(cell);
       }
 
@@ -80,7 +94,7 @@ class Schedule {
     }
   }
 
-  createCell(date, { head = false, todayCheck = false }) {
+  createCell(date, { head = false, todayCheck = false, events = [] }) {
     const formatterSettings = head
       ? { day: "numeric", weekday: "long" }
       : { day: "numeric" };
@@ -99,7 +113,77 @@ class Schedule {
       if (today.toDateString() === date.toDateString())
         td.classList.add("schedule__cell--today");
     }
+    if (events.length) {
+      td.innerText += "\n" + events.map(event => event.title).join("\n");
+    }
 
     return td;
+  }
+
+  addEventFromString(string) {
+    const [dateStr, title, ...participants] = string.split(", ");
+    const date = this.parseDate(dateStr);
+
+    if (isNaN(date.getTime()) || !title) {
+      alert(
+        'Неверный ввод! Введите данные в формате "День.Месяц.Год, Название, Участники..."'
+      );
+      return;
+    }
+
+    this.addEvent(title, date, { participants });
+  }
+
+  parseDate(dateStr) {
+    const [dayStr, monthStr, yearStr] = dateStr.split(".");
+
+    // TODO: better date parser
+    const day = Number(dayStr);
+    const month = Number(monthStr);
+    const year = Number(yearStr) || new Date().getFullYear().toString();
+
+    return new Date(year, month - 1, day);
+  }
+
+  addEvent(title, date, { participants = [], description = "" }) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    if (!this.events.get(year)) this.events.set(year, new Map());
+    if (!this.events.get(year).get(month)) this.events.get(year).set(month, []);
+
+    this.events
+      .get(year)
+      .get(month)
+      .push(new DateEvent(title, date, { participants, description }));
+
+    if (year === this.year && month === this.month) this.updateTable();
+    console.log(this.events, year, month);
+  }
+
+  getEventsMonth(year, month) {
+    return (this.events.get(year) && this.events.get(year).get(month)) || [];
+  }
+
+  getEventsOnSchedule() {
+    const thisMonth = this.getEventsMonth(this.year, this.month);
+    console.log(thisMonth);
+
+    if (this.month === 11) {
+      const prevMonth = this.getEventsMonth(this.year, 10);
+      const nextMonth = this.getEventsMonth(this.year + 1, 0);
+
+      return [...prevMonth, ...thisMonth, ...nextMonth];
+    } else if (this.month === 0) {
+      const prevMonth = this.getEventsMonth(this.year - 1, 11);
+      const nextMonth = this.getEventsMonth(this.year, 1);
+
+      return [...prevMonth, ...thisMonth, ...nextMonth];
+    } else {
+      const prevMonth = this.getEventsMonth(this.year, this.month - 1);
+      const nextMonth = this.getEventsMonth(this.year, this.month + 1);
+
+      return [...prevMonth, ...thisMonth, ...nextMonth];
+    }
   }
 }
