@@ -12,6 +12,7 @@ class Schedule {
     this.updateTable();
   }
 
+  // Next, Today & Prev month switcher
   updateTarget({ today = false, next = false, prev = false }) {
     if (today) {
       const date = new Date();
@@ -36,6 +37,8 @@ class Schedule {
     this.updateTable();
   }
 
+  /* RENDER BLOCK */
+  // Calculates, which dates we need to display
   getDatesToRender() {
     const monthStart = new Date(this.year, this.month, 0);
     const firstMonthDay = monthStart.getDay();
@@ -56,6 +59,7 @@ class Schedule {
     return days;
   }
 
+  // Render table
   updateTable() {
     this.container.innerHTML = "";
     const dates = this.getDatesToRender();
@@ -94,6 +98,7 @@ class Schedule {
     }
   }
 
+  // Generates cell of table
   createCell(date, { head = false, todayCheck = false, events = [] }) {
     const formatterSettings = head
       ? { day: "numeric", weekday: "long" }
@@ -148,7 +153,10 @@ class Schedule {
 
     return td;
   }
+  /* RENDER BLOCK */
 
+  /* EVENTS BLOCK */
+  // Parse event string
   addEventFromString(string) {
     const [dateStr, title, ...participants] = string.split(", ");
     const date = this.parseDate(dateStr);
@@ -163,6 +171,7 @@ class Schedule {
     this.addEvent(title, date, { participants });
   }
 
+  // Parse date
   parseDate(dateStr) {
     const [dayStr, monthStr, yearStr] = dateStr.split(".");
 
@@ -174,6 +183,7 @@ class Schedule {
     return new Date(year, month - 1, day);
   }
 
+  // Adds event to events list
   addEvent(title, date, { participants = [], description = "" }) {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -189,31 +199,34 @@ class Schedule {
     if (year === this.year && month === this.month) this.updateTable();
   }
 
-  getEventsMonth(year, month) {
+  // Returns Events on month
+  getEventsOnMonth(year, month) {
     return (this.events.get(year) && this.events.get(year).get(month)) || [];
   }
 
+  // Returns events on current, prev & next months (cause we need to display them)
   getEventsOnSchedule() {
-    const thisMonth = this.getEventsMonth(this.year, this.month);
+    const thisMonth = this.getEventsOnMonth(this.year, this.month);
 
     if (this.month === 11) {
-      const prevMonth = this.getEventsMonth(this.year, 10);
-      const nextMonth = this.getEventsMonth(this.year + 1, 0);
+      const prevMonth = this.getEventsOnMonth(this.year, 10);
+      const nextMonth = this.getEventsOnMonth(this.year + 1, 0);
 
       return [...prevMonth, ...thisMonth, ...nextMonth];
     } else if (this.month === 0) {
-      const prevMonth = this.getEventsMonth(this.year - 1, 11);
-      const nextMonth = this.getEventsMonth(this.year, 1);
+      const prevMonth = this.getEventsOnMonth(this.year - 1, 11);
+      const nextMonth = this.getEventsOnMonth(this.year, 1);
 
       return [...prevMonth, ...thisMonth, ...nextMonth];
     } else {
-      const prevMonth = this.getEventsMonth(this.year, this.month - 1);
-      const nextMonth = this.getEventsMonth(this.year, this.month + 1);
+      const prevMonth = this.getEventsOnMonth(this.year, this.month - 1);
+      const nextMonth = this.getEventsOnMonth(this.year, this.month + 1);
 
       return [...prevMonth, ...thisMonth, ...nextMonth];
     }
   }
 
+  // Loads events list from localStorage
   loadFromLS() {
     const eventsCollection = JSON.parse(window.localStorage.getItem("events"));
     const events = new Map();
@@ -240,6 +253,7 @@ class Schedule {
     return events;
   }
 
+  // Saves events list to localStorage
   saveToLS() {
     let eventsCollection = [];
 
@@ -251,4 +265,5 @@ class Schedule {
 
     window.localStorage.setItem("events", `[${eventsCollection}]`);
   }
+  /* EVENTS BLOCK */
 }

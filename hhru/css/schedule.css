@@ -1,0 +1,50 @@
+.schedule-container {
+  overflow-x: auto;
+}
+
+.schedule {
+  width: 100%;
+  margin-top: 12px;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #f1f1f1;
+}
+
+.schedule__cell {
+  color: #acacac;
+  vertical-align: top;
+  border: 1px solid #f1f1f1;
+  width: calc(100% / 7);
+  min-width: 125px;
+  height: 175px;
+  padding: 8px;
+  overflow-y: hidden;
+}
+
+.schedule__cell--today {
+  background: #f4f4f4;
+}
+
+.schedule__cell--today .schedule__cell__day {
+  font-weight: bold;
+}
+
+.schedule__cell--with-events {
+  background: #c2e4fe;
+}
+
+.cell__event {
+  margin-top: 2px;
+}
+
+.cell__events {
+  list-style: none;
+
+  overflow: auto;
+  height: calc(100% - 24px);
+  margin-top: 4px;
+}
+
+.cell__event__title {
+  font-weight: bold;
+}

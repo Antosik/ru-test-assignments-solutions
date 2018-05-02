@@ -1,0 +1,74 @@
+.modal {
+  display: none;
+}
+
+.modal--show {
+  display: block;
+}
+
+.modal::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  box-sizing: border-box;
+  border: 0.7em solid #cccccc;
+  border-color: transparent transparent #fff #fff;
+  transform-origin: 0 0;
+  box-shadow: -2px 2px 1px 0 #acacac;
+}
+
+.modal--top::before {
+  transform: rotate(135deg);
+  margin-left: -0.5em;
+  top: 2px;
+}
+
+.close-modal-button {
+  background: transparent;
+  padding: 2px 4px;
+  color: #acacac;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+/* FAST ADD EVENT MODAL */
+.addeventfast {
+  position: absolute;
+  left: 0;
+  bottom: -120px;
+  background: #fff;
+  z-index: 10;
+  width: 300px;
+  height: 100px;
+  border: 1px solid #cccccc;
+  box-shadow: 0 0 4px 0 #acacac;
+  padding: 12px;
+}
+
+.addeventfast::before {
+  left: 4em;
+}
+
+.addeventfast__input {
+  width: calc(100% - 16px);
+  box-shadow: inset #d1d1d1 0 2px;
+  border: #d1d1d1 1px solid;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.addeventfast__input,
+.addeventfast__button {
+  display: block;
+  margin: 8px 4px;
+}
+
+.addeventfast__button {
+  display: block;
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px #e7e7e7 solid;
+}
+/* FAST ADD EVENT MODAL */

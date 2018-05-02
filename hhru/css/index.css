@@ -22,6 +22,7 @@ body {
   cursor: pointer;
 }
 
+/* HEADER */
 .header {
   height: 135px;
   background: #f4f4f4;
@@ -50,14 +51,21 @@ body {
   margin-left: auto;
 }
 
-.search__input,
-.addeventfast__input {
+.search__input {
   box-shadow: inset #d1d1d1 0 2px;
   border: #d1d1d1 1px solid;
   padding: 6px 12px;
   border-radius: 4px;
 }
 
+.addevent__button[aria-pressed="true"] {
+  box-shadow: inset 0 0 1px 0 #000;
+  background: #015da4;
+  color: #c2d0e2;
+}
+/* HEADER */
+
+/* MAIN */
 .main__controls {
   margin-top: 16px;
   display: flex;
@@ -72,8 +80,7 @@ body {
   margin: 4px;
 }
 
-.main__controls__button,
-.addeventfast__button {
+.main__controls__button {
   background: #fff;
   border: 1px #e7e7e7 solid;
   padding: 2px 6px;
@@ -83,123 +90,4 @@ body {
   font-weight: 500;
 }
 
-.schedule-container {
-  overflow-x: auto;
-}
-
-.schedule {
-  width: 100%;
-  margin-top: 12px;
-  border-spacing: 0;
-  border-collapse: collapse;
-  border: 1px solid #f1f1f1;
-}
-
-.schedule__cell {
-  color: #acacac;
-  vertical-align: top;
-  border: 1px solid #f1f1f1;
-  width: calc(100% / 7);
-  min-width: 125px;
-  height: 175px;
-  padding: 8px;
-  overflow-y: hidden;
-}
-
-.schedule__cell--today {
-  background: #f4f4f4;
-}
-
-.schedule__cell--today .schedule__cell__day {
-  font-weight: bold;
-}
-
-.schedule__cell--with-events {
-  background: #c2e4fe;
-}
-
-.addevent__button[aria-pressed="true"] {
-  box-shadow: inset 0 0 1px 0 #000;
-  background: #015da4;
-  color: #c2d0e2;
-}
-
-.addeventfast {
-  display: none;
-  position: absolute;
-  left: 0;
-  bottom: -120px;
-  background: #fff;
-  z-index: 10;
-  width: 300px;
-  height: 100px;
-  border: 1px solid #cccccc;
-  box-shadow: 0 0 4px 0 #acacac;
-  padding: 12px;
-}
-
-.addeventfast::before {
-  left: 4em;
-}
-
-.addeventfast--show {
-  display: block;
-}
-
-.close-modal-button {
-  background: transparent;
-  padding: 2px 4px;
-  color: #acacac;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-}
-
-.addeventfast__input {
-  width: calc(100% - 16px);
-}
-
-.addeventfast__input,
-.addeventfast__button {
-  display: block;
-  margin: 8px 4px;
-}
-
-.addeventfast__button {
-  display: block;
-  padding: 4px 8px;
-}
-
-.modal::before {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  box-sizing: border-box;
-  border: 0.7em solid #cccccc;
-  border-color: transparent transparent #fff #fff;
-  transform-origin: 0 0;
-  box-shadow: -2px 2px 1px 0 #acacac;
-}
-
-.modal--top::before {
-  transform: rotate(135deg);
-  margin-left: -0.5em;
-  top: 2px;
-}
-
-.cell__event {
-  margin-top: 2px;
-}
-
-.cell__events {
-  list-style: none;
-
-  overflow: auto;
-  height: calc(100% - 24px);
-  margin-top: 4px;
-}
-
-.cell__event__title {
-  font-weight: bold;
-}
+/* MAIN */
