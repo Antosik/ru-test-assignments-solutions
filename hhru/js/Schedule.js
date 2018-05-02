@@ -9,7 +9,7 @@ class Schedule {
     this.updateTable();
   }
 
-  updateTarget({ today = false, next = false, prev = false}) {
+  updateTarget({ today = false, next = false, prev = false }) {
     if (today) {
       const date = new Date();
       this.month = date.getMonth();
@@ -35,11 +35,10 @@ class Schedule {
 
   getDatesToRender() {
     const monthStart = new Date(this.year, this.month, 0);
-    const daysInMonthCount = monthStart.getDate();
     const firstMonthDay = monthStart.getDay();
 
     const days = [];
-    for (let i = 0; i < firstMonthDay; i++) {
+    for (let i = firstMonthDay - 1; i >= 0; i--) {
       const pastDay = new Date(monthStart.getTime());
       pastDay.setDate(pastDay.getDate() - i);
       days.push(pastDay);
@@ -59,13 +58,11 @@ class Schedule {
     const dates = this.getDatesToRender();
 
     const today = new Date();
-    const isThisYear = today.getFullYear() === this.year;
-    const isThisMonth = today.getMonth() === this.month;
-    const todayCheck = isThisYear && isThisMonth;
+    const todayCheck = today.getFullYear() === this.year && today.getMonth() === this.month;
 
     const tr = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
-      const cell = this.createCell(dates[j],  { head: true, todayCheck });
+      const cell = this.createCell(dates[j], { head: true, todayCheck });
       tr.appendChild(cell);
     }
     this.container.appendChild(tr);
@@ -82,18 +79,21 @@ class Schedule {
     }
   }
 
-  createCell(date,  { head = false, todayCheck = false }) {
-    const formatter = new Intl.DateTimeFormat("ru", { day: "numeric" });
+  createCell(date, { head = false, todayCheck = false }) {
+    const formatterSettings = head ? { day: "numeric", weekday: "long" } : { day: "numeric" };
+    const formatter = new Intl.DateTimeFormat("ru", formatterSettings);
 
     const td = document.createElement("td");
     td.dataset.date = date.toISOString();
     td.classList.add("schedule__cell");
-    if (head) td.classList.add("schedule__cell--head");
     td.innerText = formatter.format(date);
 
+    if (head) {
+      td.classList.add("schedule__cell--head");
+    }
     if (todayCheck) {
       const today = new Date();
-      if (today.toDateString() === date.toDateString())  td.classList.add("schedule__cell--today");
+      if (today.toDateString() === date.toDateString()) td.classList.add("schedule__cell--today");
     }
 
     return td;
