@@ -1,0 +1,80 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+.container {
+    width: calc(100% - 40px);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.button {
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header {
+    height: 135px;
+    background: #F4F4F4;
+    box-shadow: #D1D1D1 0 4px 4px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.header__controls {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+}
+
+.header__controls__button {
+    padding: 6px 12px;
+    background: #0271C7;
+    color: #fff;
+    text-shadow: #2D2D2D 0 2px;
+    box-shadow: #D1D1D1 0 2px;
+    margin: 4px;
+}
+
+.header__controls__search {
+    margin-left: auto;
+}
+
+.search__input {
+    box-shadow: inset #D1D1D1 0 2px;
+    border: 0;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.main__controls {
+    margin-top: 16px;
+    display: flex;
+}
+
+.main__controls__monthpicker {
+    display: flex;
+}
+
+.main__controls__button, .monthpicker__month {
+    margin: 4px;
+}
+
+.main__controls__button {
+    background: #fff;
+    border: 1px #E7E7E7 solid;
+    padding: 2px 6px;
+}
+
+.monthpicker__month {
+    font-weight: 500;
+}
