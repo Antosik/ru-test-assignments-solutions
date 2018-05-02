@@ -1,176 +1,180 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
 
 .container {
-    width: calc(100% - 40px);
-    max-width: 1200px;
-    margin: 0 auto;
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .button {
-    border: 0;
-    border-radius: 4px;
-    cursor: pointer;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .header {
-    height: 135px;
-    background: #F4F4F4;
-    box-shadow: #D1D1D1 0 4px 4px;
-    display: flex;
-    align-items: flex-end;
+  height: 135px;
+  background: #f4f4f4;
+  box-shadow: #d1d1d1 0 4px 4px;
+  display: flex;
+  align-items: flex-end;
 }
 
 .header__controls {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 16px;
-    position: relative;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+  position: relative;
 }
 
 .header__controls__button {
-    padding: 6px 12px;
-    background: #0271C7;
-    color: #fff;
-    text-shadow: #2D2D2D 0 2px;
-    box-shadow: #D1D1D1 0 2px;
-    margin: 4px;
+  padding: 6px 12px;
+  background: #0271c7;
+  color: #fff;
+  text-shadow: #2d2d2d 0 2px;
+  box-shadow: #d1d1d1 0 2px;
+  margin: 4px;
 }
 
 .header__controls__search {
-    margin-left: auto;
+  margin-left: auto;
 }
 
-.search__input, .addeventfast__input {
-    box-shadow: inset #D1D1D1 0 2px;
-    border: #D1D1D1 1px solid;
-    padding: 6px 12px;
-    border-radius: 4px;
+.search__input,
+.addeventfast__input {
+  box-shadow: inset #d1d1d1 0 2px;
+  border: #d1d1d1 1px solid;
+  padding: 6px 12px;
+  border-radius: 4px;
 }
 
 .main__controls {
-    margin-top: 16px;
-    display: flex;
+  margin-top: 16px;
+  display: flex;
 }
 
 .main__controls__monthpicker {
-    display: flex;
+  display: flex;
 }
 
-.main__controls__button, .monthpicker__month {
-    margin: 4px;
+.main__controls__button,
+.monthpicker__month {
+  margin: 4px;
 }
 
-.main__controls__button, .addeventfast__button {
-    background: #fff;
-    border: 1px #E7E7E7 solid;
-    padding: 2px 6px;
+.main__controls__button,
+.addeventfast__button {
+  background: #fff;
+  border: 1px #e7e7e7 solid;
+  padding: 2px 6px;
 }
 
 .monthpicker__month {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .schedule-container {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
 .schedule {
-    width: 100%;
-    margin-top: 12px;
-    border-spacing: 0;
-    border-collapse: collapse;
-    border: 1px solid #F1F1F1;
+  width: 100%;
+  margin-top: 12px;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #f1f1f1;
 }
 
 .schedule__cell {
-    color: #ACACAC;
-    vertical-align: top;
-    border: 1px solid #F1F1F1;
-    width: calc(100% / 7);
-    min-width: 125px;
-    height: 125px;
-    padding: 8px;
+  color: #acacac;
+  vertical-align: top;
+  border: 1px solid #f1f1f1;
+  width: calc(100% / 7);
+  min-width: 125px;
+  height: 125px;
+  padding: 8px;
 }
 
 .schedule__cell--today {
-    background: #F4F4F4;
+  background: #f4f4f4;
 }
 
 .addevent__button[aria-pressed="true"] {
-    box-shadow: inset 0 0 1px 0 #000;
-    background: #015DA4;
-    color: #C2D0E2;
+  box-shadow: inset 0 0 1px 0 #000;
+  background: #015da4;
+  color: #c2d0e2;
 }
 
 .addeventfast {
-    display: none;
-    position: absolute;
-    left: 0;
-    bottom: -120px;
-    background: #fff;
-    z-index: 10;
-    width: 300px;
-    height: 100px;
-    border: 1px solid #CCCCCC;
-    box-shadow: 0 0 4px 0 #ACACAC;
-    padding: 12px;
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: -120px;
+  background: #fff;
+  z-index: 10;
+  width: 300px;
+  height: 100px;
+  border: 1px solid #cccccc;
+  box-shadow: 0 0 4px 0 #acacac;
+  padding: 12px;
 }
 
 .addeventfast::before {
-    left: 4em;
+  left: 4em;
 }
 
 .addeventfast--show {
-    display: block;
+  display: block;
 }
 
 .close-modal-button {
-    background: transparent;
-    padding: 2px 4px;
-    color: #ACACAC;
-    position: absolute;
-    top: 2px;
-    right: 2px;
+  background: transparent;
+  padding: 2px 4px;
+  color: #acacac;
+  position: absolute;
+  top: 2px;
+  right: 2px;
 }
 
 .addeventfast__input {
-    width: calc(100% - 16px);
+  width: calc(100% - 16px);
 }
 
-.addeventfast__input, .addeventfast__button {
-    display: block;
-    margin: 8px 4px;
+.addeventfast__input,
+.addeventfast__button {
+  display: block;
+  margin: 8px 4px;
 }
 
 .addeventfast__button {
-    display: block;
-    padding: 4px 8px;
+  display: block;
+  padding: 4px 8px;
 }
 
-.modal::before{
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    box-sizing: border-box;
-    border: 0.7em solid #CCCCCC;
-    border-color: transparent transparent #fff #fff;
-    transform-origin: 0 0;
-    box-shadow: -2px 2px 1px 0 #ACACAC;
+.modal::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  box-sizing: border-box;
+  border: 0.7em solid #cccccc;
+  border-color: transparent transparent #fff #fff;
+  transform-origin: 0 0;
+  box-shadow: -2px 2px 1px 0 #acacac;
 }
 
 .modal--top::before {
-    transform: rotate(135deg);
-    margin-left: -0.5em;
-    top: 2px;
+  transform: rotate(135deg);
+  margin-left: -0.5em;
+  top: 2px;
 }

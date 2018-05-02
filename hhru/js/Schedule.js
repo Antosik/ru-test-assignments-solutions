@@ -58,7 +58,8 @@ class Schedule {
     const dates = this.getDatesToRender();
 
     const today = new Date();
-    const todayCheck = today.getFullYear() === this.year && today.getMonth() === this.month;
+    const todayCheck =
+      today.getFullYear() === this.year && today.getMonth() === this.month;
 
     const tr = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
@@ -80,7 +81,9 @@ class Schedule {
   }
 
   createCell(date, { head = false, todayCheck = false }) {
-    const formatterSettings = head ? { day: "numeric", weekday: "long" } : { day: "numeric" };
+    const formatterSettings = head
+      ? { day: "numeric", weekday: "long" }
+      : { day: "numeric" };
     const formatter = new Intl.DateTimeFormat("ru", formatterSettings);
 
     const td = document.createElement("td");
@@ -93,7 +96,8 @@ class Schedule {
     }
     if (todayCheck) {
       const today = new Date();
-      if (today.toDateString() === date.toDateString()) td.classList.add("schedule__cell--today");
+      if (today.toDateString() === date.toDateString())
+        td.classList.add("schedule__cell--today");
     }
 
     return td;

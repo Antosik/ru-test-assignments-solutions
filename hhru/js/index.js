@@ -19,30 +19,38 @@ document.querySelector(".monthpicker__next").addEventListener("click", () => {
   schedule.updateTarget({ next: true });
   updateMonthTitle(schedule.month, schedule.year);
 });
-document.querySelector(".refresh__button").addEventListener("click", () => alert("Зачем тут эта кнопка? 🤔"))
+document
+  .querySelector(".refresh__button")
+  .addEventListener("click", () => alert("Зачем тут эта кнопка? 🤔"));
 
 function updateMonthTitle(month, year) {
   const date = new Date(year, month, 1);
-  const formatter = new Intl.DateTimeFormat("ru", { month: "long", year: "numeric" });
+  const formatter = new Intl.DateTimeFormat("ru", {
+    month: "long",
+    year: "numeric"
+  });
   const dateString = formatter.format(date);
 
-  document.querySelector(".monthpicker__month").innerText = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+  document.querySelector(".monthpicker__month").innerText =
+    dateString.charAt(0).toUpperCase() + dateString.slice(1);
 }
 
-document.querySelector(".addevent__button").addEventListener('click', (e) => {
-  let pressed = e.target.getAttribute('aria-pressed') === 'true';
-  e.target.setAttribute('aria-pressed', String(!pressed));
+document.querySelector(".addevent__button").addEventListener("click", e => {
+  let pressed = e.target.getAttribute("aria-pressed") === "true";
+  e.target.setAttribute("aria-pressed", String(!pressed));
 
   const dialog = document.querySelector(".addeventfast");
   dialog.classList.toggle("addeventfast--show");
   dialog.setAttribute("aria-hidden", String(!pressed));
 });
 
-document.querySelector(".close-modal-button").addEventListener("click", (e) => {
+document.querySelector(".close-modal-button").addEventListener("click", e => {
   e.target.parentNode.setAttribute("aria-hidden", "false");
   e.target.parentNode.classList.toggle("addeventfast--show");
 });
 
-document.querySelector(".addeventfast__close").addEventListener("click", (e) => {
-  document.querySelector(".addevent__button").setAttribute('aria-pressed', "false");
+document.querySelector(".addeventfast__close").addEventListener("click", e => {
+  document
+    .querySelector(".addevent__button")
+    .setAttribute("aria-pressed", "false");
 });
