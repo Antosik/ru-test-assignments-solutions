@@ -79,16 +79,28 @@ body {
     font-weight: 500;
 }
 
+.schedule-container {
+    overflow-x: auto;
+}
+
 .schedule {
     width: 100%;
     margin-top: 12px;
     border-spacing: 0;
+    border-collapse: collapse;
     border: 1px solid #F1F1F1;
 }
 
 .schedule__cell {
+    color: #ACACAC;
+    vertical-align: top;
     border: 1px solid #F1F1F1;
     width: calc(100% / 7);
+    min-width: 125px;
     height: 125px;
     padding: 8px;
+}
+
+.schedule__cell--today {
+    background: #F4F4F4;
 }

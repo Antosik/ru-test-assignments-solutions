@@ -33,9 +33,14 @@ class Schedule {
     this.container.innerHTML = "";
     const dates = this.getDatesToRender();
 
+    const today = new Date();
+    const isThisYear = today.getFullYear() === this.year;
+    const isThisMonth = today.getMonth() === this.month;
+    const todayCheck = isThisYear && isThisMonth;
+
     const tr = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
-      const cell = this.createHeadCell(dates[j]);
+      const cell = this.createCell(dates[j],  { head: true, todayCheck });
       tr.appendChild(cell);
     }
     this.container.appendChild(tr);
@@ -44,7 +49,7 @@ class Schedule {
       const tr = document.createElement("tr");
 
       for (let j = 0; j < 7; j++) {
-        const cell = this.createCell(dates[i * 7 + j]);
+        const cell = this.createCell(dates[i * 7 + j], { todayCheck });
         tr.appendChild(cell);
       }
 
@@ -52,25 +57,19 @@ class Schedule {
     }
   }
 
-  createCell(date) {
+  createCell(date,  { head = false, todayCheck = false }) {
     const formatter = new Intl.DateTimeFormat("ru", { day: "numeric" });
 
     const td = document.createElement("td");
     td.dataset.date = date.toISOString();
     td.classList.add("schedule__cell");
+    if (head) td.classList.add("schedule__cell--head");
     td.innerText = formatter.format(date);
 
-    return td;
-  }
-
-  createHeadCell(date) {
-    const formatter = new Intl.DateTimeFormat("ru", { weekday: "long", day: "numeric" });
-
-    const td = document.createElement("td");
-    td.dataset.date = date.toISOString();
-    td.classList.add("schedule__cell");
-    td.classList.add("schedule__cell--head");
-    td.innerText = formatter.format(date);
+    if (todayCheck) {
+      const today = new Date();
+      if (today.toDateString() === date.toDateString())  td.classList.add("schedule__cell--today");
+    }
 
     return td;
   }
