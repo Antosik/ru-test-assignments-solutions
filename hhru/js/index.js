@@ -41,11 +41,11 @@ document.querySelector(".addevent__button").addEventListener("click", e => {
 
   const dialog = document.querySelector(".addeventfast");
   dialog.classList.toggle("addeventfast--show");
-  dialog.setAttribute("aria-hidden", String(!pressed));
+  dialog.setAttribute("aria-hidden", String(pressed));
 });
 
 document.querySelector(".close-modal-button").addEventListener("click", e => {
-  e.target.parentNode.setAttribute("aria-hidden", "false");
+  e.target.parentNode.setAttribute("aria-hidden", "true");
   e.target.parentNode.classList.toggle("addeventfast--show");
 });
 
