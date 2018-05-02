@@ -2,10 +2,35 @@ class Schedule {
   constructor(container) {
     this.container = container;
 
-    this.month = new Date().getMonth();
-    this.year = new Date().getFullYear();
+    const today = new Date();
+    this.month = today.getMonth();
+    this.year = today.getFullYear();
 
-    this.createTable();
+    this.updateTable();
+  }
+
+  updateTarget({ today = false, next = false, prev = false}) {
+    if (today) {
+      const date = new Date();
+      this.month = date.getMonth();
+      this.year = date.getFullYear();
+    } else if (next) {
+      if (this.month === 11) {
+        this.month = 0;
+        this.year = this.year + 1;
+      } else {
+        this.month = this.month + 1;
+      }
+    } else if (prev) {
+      if (this.month === 0) {
+        this.month = 11;
+        this.year = this.year - 1;
+      } else {
+        this.month = this.month - 1;
+      }
+    }
+
+    this.updateTable();
   }
 
   getDatesToRender() {
@@ -29,7 +54,7 @@ class Schedule {
     return days;
   }
 
-  createTable() {
+  updateTable() {
     this.container.innerHTML = "";
     const dates = this.getDatesToRender();
 
