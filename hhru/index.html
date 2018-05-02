@@ -6,6 +6,27 @@
     <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
+<header class="header">
+    <div class="header__controls">
+        <button type="button" class="button header__controls__button">Добавить</button>
+        <button type="button" class="button header__controls__button">Обновить</button>
+        <div class="header__controls__search">
+            <span class="icon icon--search"></span>
+            <input type="text" class="input search__input" placeholder="Событие, дата или участника">
+        </div>
+    </div>
+</header>
+<main class="main">
+    <div class="main__controls">
+        <div class="main__controls__monthpicker">
+            <button class="main__controls monthpicker__left"><</button>
+            <h3>Март</h3>
+            <button class="main__controls monthpicker__right">></button>
+        </div>
+        <button class="main__controls today">Сегодня</button>
+    </div>
+    <table class="schedule"></table>
+</main>
 
 <script src="./js/index.js"></script>
 </body>
