@@ -6,7 +6,8 @@ class Schedule {
     this.month = today.getMonth();
     this.year = today.getFullYear();
 
-    this.events = new Map();
+    if (!window.localStorage.getItem("events")) this.events = new Map();
+    else this.events = this.loadFromLS();
 
     this.updateTable();
   }
@@ -59,7 +60,6 @@ class Schedule {
     this.container.innerHTML = "";
     const dates = this.getDatesToRender();
     const eventsOnSchedule = this.getEventsOnSchedule();
-    console.log(eventsOnSchedule);
 
     const today = new Date();
     const todayCheck =
@@ -187,7 +187,6 @@ class Schedule {
       .push(new DateEvent(title, date, { participants, description }));
 
     if (year === this.year && month === this.month) this.updateTable();
-    console.log(this.events, year, month);
   }
 
   getEventsMonth(year, month) {
@@ -196,7 +195,6 @@ class Schedule {
 
   getEventsOnSchedule() {
     const thisMonth = this.getEventsMonth(this.year, this.month);
-    console.log(thisMonth);
 
     if (this.month === 11) {
       const prevMonth = this.getEventsMonth(this.year, 10);
@@ -214,5 +212,43 @@ class Schedule {
 
       return [...prevMonth, ...thisMonth, ...nextMonth];
     }
+  }
+
+  loadFromLS() {
+    const eventsCollection = JSON.parse(window.localStorage.getItem("events"));
+    const events = new Map();
+
+    for (const event of eventsCollection) {
+      const date = new Date(event.date);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+
+      if (!events.get(year)) events.set(year, new Map());
+      if (!events.get(year).get(month)) events.get(year).set(month, []);
+
+      events
+        .get(year)
+        .get(month)
+        .push(
+          new DateEvent(event.title, date, {
+            participants: event.participants,
+            description: event.description
+          })
+        );
+    }
+
+    return events;
+  }
+
+  saveToLS() {
+    let eventsCollection = [];
+
+    for (const months of this.events.values()) {
+      for (const events of months.values()) {
+        eventsCollection = eventsCollection.concat(events);
+      }
+    }
+
+    window.localStorage.setItem("events", `[${eventsCollection}]`);
   }
 }

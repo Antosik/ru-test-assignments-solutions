@@ -21,7 +21,7 @@ document.querySelector(".monthpicker__next").addEventListener("click", () => {
 });
 document
   .querySelector(".refresh__button")
-  .addEventListener("click", () => alert("Зачем тут эта кнопка? 🤔"));
+  .addEventListener("click", () => schedule.saveToLS());
 
 function updateMonthTitle(month, year) {
   const date = new Date(year, month, 1);
@@ -62,3 +62,8 @@ document
       document.querySelector(".addeventfast__input").value
     );
   });
+
+window.addEventListener("beforeunload", () => {
+  schedule.saveToLS();
+  e.preventDefault();
+});

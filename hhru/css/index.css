@@ -115,7 +115,7 @@ body {
 }
 
 .schedule__cell--with-events {
-  background: #C2E4FE;
+  background: #c2e4fe;
 }
 
 .addevent__button[aria-pressed="true"] {
