@@ -34,6 +34,7 @@ body {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 16px;
+    position: relative;
 }
 
 .header__controls__button {
@@ -49,7 +50,7 @@ body {
     margin-left: auto;
 }
 
-.search__input {
+.search__input, .addeventfast__input {
     box-shadow: inset #D1D1D1 0 2px;
     border: #D1D1D1 1px solid;
     padding: 6px 12px;
@@ -69,7 +70,7 @@ body {
     margin: 4px;
 }
 
-.main__controls__button {
+.main__controls__button, .addeventfast__button {
     background: #fff;
     border: 1px #E7E7E7 solid;
     padding: 2px 6px;
@@ -103,4 +104,73 @@ body {
 
 .schedule__cell--today {
     background: #F4F4F4;
+}
+
+.addevent__button[aria-pressed="true"] {
+    box-shadow: inset 0 0 1px 0 #000;
+    background: #015DA4;
+    color: #C2D0E2;
+}
+
+.addeventfast {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: -120px;
+    background: #fff;
+    z-index: 10;
+    width: 300px;
+    height: 100px;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 0 4px 0 #ACACAC;
+    padding: 12px;
+}
+
+.addeventfast::before {
+    left: 4em;
+}
+
+.addeventfast--show {
+    display: block;
+}
+
+.close-modal-button {
+    background: transparent;
+    padding: 2px 4px;
+    color: #ACACAC;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.addeventfast__input {
+    width: calc(100% - 16px);
+}
+
+.addeventfast__input, .addeventfast__button {
+    display: block;
+    margin: 8px 4px;
+}
+
+.addeventfast__button {
+    display: block;
+    padding: 4px 8px;
+}
+
+.modal::before{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    box-sizing: border-box;
+    border: 0.7em solid #CCCCCC;
+    border-color: transparent transparent #fff #fff;
+    transform-origin: 0 0;
+    box-shadow: -2px 2px 1px 0 #ACACAC;
+}
+
+.modal--top::before {
+    transform: rotate(135deg);
+    margin-left: -0.5em;
+    top: 2px;
 }
