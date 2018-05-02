@@ -103,18 +103,47 @@ class Schedule {
     const td = document.createElement("td");
     td.dataset.date = date.toISOString();
     td.classList.add("schedule__cell");
-    td.innerText = formatter.format(date);
+
+    const daySpan = document.createElement("span");
+    daySpan.setAttribute("class", "schedule__cell__day");
+    daySpan.innerText = formatter.format(date);
+    td.appendChild(daySpan);
 
     if (head) {
       td.classList.add("schedule__cell--head");
     }
+
     if (todayCheck) {
       const today = new Date();
       if (today.toDateString() === date.toDateString())
         td.classList.add("schedule__cell--today");
     }
+
     if (events.length) {
-      td.innerText += "\n" + events.map(event => event.title).join("\n");
+      td.classList.add("schedule__cell--with-events");
+
+      const list = document.createElement("ul");
+      list.setAttribute("class", "cell__events");
+
+      events.forEach(event => {
+        const item = document.createElement("li");
+        item.setAttribute("class", "cell__event");
+
+        const itemTitle = document.createElement("div");
+        itemTitle.setAttribute("class", "cell__event__title");
+        itemTitle.innerText = event.title;
+
+        const itemParticipants = document.createElement("div");
+        itemParticipants.setAttribute("class", "cell__event__participants");
+        itemParticipants.innerText = event.participantsToString();
+
+        item.appendChild(itemTitle);
+        item.appendChild(itemParticipants);
+
+        list.appendChild(item);
+      });
+
+      td.appendChild(list);
     }
 
     return td;
