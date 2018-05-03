@@ -51,11 +51,19 @@ body {
   margin-left: auto;
 }
 
+.search__label {
+  cursor: pointer;
+}
+
 .search__input {
   box-shadow: inset #d1d1d1 0 2px;
   border: #d1d1d1 1px solid;
   padding: 6px 12px;
   border-radius: 4px;
+}
+
+.search__input:focus {
+  width: 350px;
 }
 
 .addevent__button[aria-pressed="true"] {

@@ -18,6 +18,7 @@ document.querySelector(".monthpicker__next").addEventListener("click", () => {
 /* NEXT, PREV & CURRENT month buttons */
 
 /* HELPERS */
+
 // Updates title with month & year
 function updateMonthTitle(month, year) {
   const date = new Date(year, month, 1);
@@ -64,9 +65,9 @@ document.querySelector(".addeventfast__close").addEventListener("click", () => {
 document
   .querySelector(".addeventfast__button")
   .addEventListener("click", () => {
-    schedule.addEventFromString(
-      document.querySelector(".addeventfast__input").value
-    );
+    const input = document.querySelector(".addeventfast__input");
+    schedule.addEventFromString(input.value);
+    input.value = "";
   });
 
 // Hides modal

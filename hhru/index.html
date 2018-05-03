@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>hhru/frontend-test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/schedule.css">
     <link rel="stylesheet" href="./css/modals.css">
@@ -14,8 +15,8 @@
             <button type="button" role="switch" class="button header__controls__button addevent__button" aria-pressed="false">Добавить</button>
             <button type="button" class="button header__controls__button refresh__button">Сохранить</button>
             <div class="header__controls__search">
-                <span class="icon icon--search"></span>
-                <input type="text" class="input search__input" placeholder="Событие, дата или участника">
+                <label class="search__label icon icon--search" for="search-input">🔍</label>
+                <input type="text" class="input search__input" placeholder="Событие, дата или участника" id="search-input">
             </div>
             <div role="dialog" class="addeventfast modal modal--top ">
                 <button type="button" class="button close-modal-button addeventfast__close">x</button>
