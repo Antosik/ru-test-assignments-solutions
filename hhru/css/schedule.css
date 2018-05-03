@@ -16,7 +16,7 @@
   border: 1px solid #f1f1f1;
   width: calc(100% / 7);
   min-width: 125px;
-  height: 175px;
+  height: 150px;
   padding: 8px;
   overflow-y: hidden;
 }
