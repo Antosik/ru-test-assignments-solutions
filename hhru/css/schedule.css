@@ -46,7 +46,7 @@
 }
 
 .cell__events::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .cell__event__title {

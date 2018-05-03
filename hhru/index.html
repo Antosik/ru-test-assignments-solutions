@@ -17,8 +17,11 @@
             <div class="header__controls__search">
                 <label class="search__label icon icon--search" for="search-input">🔍</label>
                 <input type="text" class="input search__input" placeholder="Событие, дата или участника" id="search-input">
+                <div role="dialog" class="search__modal modal modal--top  modal-show">
+                    <ul class="search__items"></ul>
+                </div>
             </div>
-            <div role="dialog" class="addeventfast modal modal--top ">
+            <div role="dialog" class="addeventfast modal modal--top">
                 <button type="button" class="button close-modal-button addeventfast__close">x</button>
                 <input type="text" class="input addeventfast__input" placeholder="5 марта, День рождение, Я, Иванов Иван, Петя">
                 <button type="button" class="button addeventfast__button">Создать</button>
@@ -44,6 +47,7 @@
 
 <script src="./js/Schedule.js"></script>
 <script src="./js/DateEvent.js"></script>
+<script src="./js/SearchList.js"></script>
 <script src="./js/index.js"></script>
 </body>
 </html>

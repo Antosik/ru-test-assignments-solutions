@@ -13,7 +13,7 @@ class Schedule {
   }
 
   // Next, Today & Prev month switcher
-  updateTarget({ today = false, next = false, prev = false }) {
+  updateTarget({ today = false, next = false, prev = false, date = null }) {
     if (today) {
       const date = new Date();
       this.month = date.getMonth();
@@ -32,6 +32,9 @@ class Schedule {
       } else {
         this.month = this.month - 1;
       }
+    } else if (date && !isNan(date.getTime())) {
+      this.month = date.getMonth();
+      this.year = date.getFullYear();
     }
 
     this.updateTable();
@@ -174,7 +177,7 @@ class Schedule {
       return;
     }
 
-    this.addEvent(title, date, { participants });
+    return this.addEvent(title, date, { participants });
   }
 
   // Parse date
@@ -209,13 +212,17 @@ class Schedule {
         .get(month)
         .set(day, []);
 
+    const event = new DateEvent(title, date, { participants, description });
+
     this.events
       .get(year)
       .get(month)
       .get(day)
-      .push(new DateEvent(title, date, { participants, description }));
+      .push(event);
 
     if (year === this.year && month === this.month) this.updateTable();
+
+    return event;
   }
 
   // Loads events list from localStorage
@@ -259,6 +266,14 @@ class Schedule {
 
   // Saves events list to localStorage
   saveToLS() {
+    let eventsCollection = this.getEventsArray();
+
+    window.localStorage.setItem("events", `[${eventsCollection}]`);
+  }
+  /* EVENTS BLOCK */
+
+  // Returns all events in array
+  getEventsArray() {
     let eventsCollection = [];
 
     for (const months of this.events.values()) {
@@ -269,7 +284,6 @@ class Schedule {
       }
     }
 
-    window.localStorage.setItem("events", `[${eventsCollection}]`);
+    return eventsCollection;
   }
-  /* EVENTS BLOCK */
 }

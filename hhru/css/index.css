@@ -49,6 +49,7 @@ body {
 
 .header__controls__search {
   margin-left: auto;
+  position: relative;
 }
 
 .search__label {
@@ -64,6 +65,41 @@ body {
 
 .search__input:focus {
   width: 350px;
+}
+
+.search__modal {
+  position: absolute;
+  left: 20px;
+  top: calc(100% + 20px);
+  background: #fff;
+  z-index: 10;
+  width: 200px;
+  height: 275px;
+  box-shadow: #d1d1d1 0 0 4px;
+  border-radius: 4px;
+}
+
+.search__modal::before {
+  left: 100px;
+}
+
+.search__items {
+  list-style: none;
+
+  overflow-y: auto;
+  height: calc(100% - 8px);
+  margin-top: 4px;
+}
+
+.search__item {
+  margin-top: 4px;
+  padding: 8px;
+  background: #fff;
+  color: #000;
+}
+.search__item:hover {
+  color: #fff;
+  background: #27a1ff;
 }
 
 .addevent__button[aria-pressed="true"] {

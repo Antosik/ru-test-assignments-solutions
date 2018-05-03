@@ -66,8 +66,10 @@ document
   .querySelector(".addeventfast__button")
   .addEventListener("click", () => {
     const input = document.querySelector(".addeventfast__input");
-    schedule.addEventFromString(input.value);
+    const event = schedule.addEventFromString(input.value);
+
     input.value = "";
+    search.events.push(event);
   });
 
 // Hides modal
@@ -75,4 +77,23 @@ document.querySelector(".close-modal-button").addEventListener("click", e => {
   e.target.parentNode.setAttribute("aria-hidden", "true");
   e.target.parentNode.classList.remove("modal--show");
 });
-/* HELPERS */
+/* MODALS */
+
+/* SEARCH */
+const search_input = document.querySelector(".search__input");
+const search_container = document.querySelector(".search__items");
+const search = new SearchList(search_container, schedule.getEventsArray());
+search_input.addEventListener("input", e => {
+  search.updateList(e.target.value);
+});
+const showSearchList = () => {
+  document.querySelector(".search__modal").classList.add("modal--show");
+  document.querySelector(".search__modal").setAttribute("aria-hidden", "false");
+};
+const hideSearchList = () => {
+  document.querySelector(".search__modal").classList.remove("modal--show");
+  document.querySelector(".search__modal").setAttribute("aria-hidden", "true");
+};
+search_input.addEventListener("focus", showSearchList);
+search_input.addEventListener("blur", hideSearchList);
+/* SEARCH */
