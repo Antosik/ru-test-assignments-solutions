@@ -63,21 +63,15 @@ class Schedule {
   updateTable() {
     this.container.innerHTML = "";
     const dates = this.getDatesToRender();
-    const eventsOnSchedule = this.getEventsOnSchedule();
-
     const today = new Date();
     const todayCheck =
       today.getFullYear() === this.year && today.getMonth() === this.month;
 
     const tr = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
-      const events = eventsOnSchedule.filter(
-        event => dates[j].toDateString() === event.date.toDateString()
-      );
       const cell = this.createCell(dates[j], {
         head: true,
-        todayCheck,
-        events
+        todayCheck
       });
       tr.appendChild(cell);
     }
@@ -87,10 +81,7 @@ class Schedule {
       const tr = document.createElement("tr");
 
       for (let j = 0; j < 7; j++) {
-        const events = eventsOnSchedule.filter(
-          event => dates[i * 7 + j].toDateString() === event.date.toDateString()
-        );
-        const cell = this.createCell(dates[i * 7 + j], { todayCheck, events });
+        const cell = this.createCell(dates[i * 7 + j], { todayCheck });
         tr.appendChild(cell);
       }
 
@@ -99,7 +90,7 @@ class Schedule {
   }
 
   // Generates cell of table
-  createCell(date, { head = false, todayCheck = false, events = [] }) {
+  createCell(date, { head = false, todayCheck = false }) {
     const formatterSettings = head
       ? { day: "numeric", weekday: "long" }
       : { day: "numeric" };
@@ -124,7 +115,22 @@ class Schedule {
         td.classList.add("schedule__cell--today");
     }
 
-    if (events.length) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    if (
+      this.events.has(year) &&
+      this.events.get(year).has(month) &&
+      this.events
+        .get(year)
+        .get(month)
+        .has(day)
+    ) {
+      const events = this.events
+        .get(year)
+        .get(month)
+        .get(day);
+
       td.classList.add("schedule__cell--with-events");
 
       const list = document.createElement("ul");
@@ -187,43 +193,29 @@ class Schedule {
   addEvent(title, date, { participants = [], description = "" }) {
     const year = date.getFullYear();
     const month = date.getMonth();
+    const day = date.getDate();
 
-    if (!this.events.get(year)) this.events.set(year, new Map());
-    if (!this.events.get(year).get(month)) this.events.get(year).set(month, []);
+    if (!this.events.has(year)) this.events.set(year, new Map());
+    if (!this.events.get(year).has(month))
+      this.events.get(year).set(month, new Map());
+    if (
+      !this.events
+        .get(year)
+        .get(month)
+        .has(day)
+    )
+      this.events
+        .get(year)
+        .get(month)
+        .set(day, []);
 
     this.events
       .get(year)
       .get(month)
+      .get(day)
       .push(new DateEvent(title, date, { participants, description }));
 
     if (year === this.year && month === this.month) this.updateTable();
-  }
-
-  // Returns Events on month
-  getEventsOnMonth(year, month) {
-    return (this.events.get(year) && this.events.get(year).get(month)) || [];
-  }
-
-  // Returns events on current, prev & next months (cause we need to display them)
-  getEventsOnSchedule() {
-    const thisMonth = this.getEventsOnMonth(this.year, this.month);
-
-    if (this.month === 11) {
-      const prevMonth = this.getEventsOnMonth(this.year, 10);
-      const nextMonth = this.getEventsOnMonth(this.year + 1, 0);
-
-      return [...prevMonth, ...thisMonth, ...nextMonth];
-    } else if (this.month === 0) {
-      const prevMonth = this.getEventsOnMonth(this.year - 1, 11);
-      const nextMonth = this.getEventsOnMonth(this.year, 1);
-
-      return [...prevMonth, ...thisMonth, ...nextMonth];
-    } else {
-      const prevMonth = this.getEventsOnMonth(this.year, this.month - 1);
-      const nextMonth = this.getEventsOnMonth(this.year, this.month + 1);
-
-      return [...prevMonth, ...thisMonth, ...nextMonth];
-    }
   }
 
   // Loads events list from localStorage
@@ -235,13 +227,25 @@ class Schedule {
       const date = new Date(event.date);
       const year = date.getFullYear();
       const month = date.getMonth();
+      const day = date.getDate();
 
-      if (!events.get(year)) events.set(year, new Map());
-      if (!events.get(year).get(month)) events.get(year).set(month, []);
+      if (!events.has(year)) events.set(year, new Map());
+      if (!events.get(year).has(month)) events.get(year).set(month, new Map());
+      if (
+        !events
+          .get(year)
+          .get(month)
+          .has(day)
+      )
+        events
+          .get(year)
+          .get(month)
+          .set(day, []);
 
       events
         .get(year)
         .get(month)
+        .get(day)
         .push(
           new DateEvent(event.title, date, {
             participants: event.participants,
@@ -258,8 +262,10 @@ class Schedule {
     let eventsCollection = [];
 
     for (const months of this.events.values()) {
-      for (const events of months.values()) {
-        eventsCollection = eventsCollection.concat(events);
+      for (const days of months.values()) {
+        for (const events of days.values()) {
+          eventsCollection = eventsCollection.concat(events);
+        }
       }
     }
 
