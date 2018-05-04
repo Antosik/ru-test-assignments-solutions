@@ -2,6 +2,10 @@
   overflow-x: auto;
 }
 
+.schedule-container::-webkit-scrollbar {
+  height: 10px;
+}
+
 .schedule {
   width: 100%;
   margin-top: 12px;
@@ -34,7 +38,8 @@
 }
 
 .cell__event {
-  margin-top: 2px;
+  margin: 4px 0;
+  color: #666;
 }
 
 .cell__events {
@@ -51,4 +56,8 @@
 
 .cell__event__title {
   font-weight: bold;
+}
+
+.cell__event__participants {
+  font-size: 14px;
 }
