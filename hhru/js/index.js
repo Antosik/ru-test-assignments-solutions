@@ -1,47 +1,48 @@
+const titleElement = document.querySelector(".monthpicker__month");
+
+const eventsStorage = new DateEventsStorage();
+if (window.localStorage.getItem("events")) eventsStorage.loadFromLS();
+
 const scheduleContainer = document.querySelector(".schedule");
 const schedule = new Schedule(scheduleContainer);
-updateMonthTitle(schedule.month, schedule.year);
+schedule.update(eventsStorage);
+titleElement.innerText = schedule.getMonthYearTitle();
+
+const searchContainer = document.querySelector(".search__items");
+const search = new SearchList(searchContainer);
+
+eventsStorage.onChange((events) => {
+  schedule.update(events);
+});
+
 
 /* NEXT, PREV & CURRENT month buttons */
 document.querySelector(".today__button").addEventListener("click", () => {
-  schedule.updateTarget({ today: true });
-  updateMonthTitle(schedule.month, schedule.year);
+  schedule.setDate(eventsStorage.getEventsMap(), { today: true });
+  titleElement.innerText = schedule.getMonthYearTitle();
 });
 document.querySelector(".monthpicker__prev").addEventListener("click", () => {
-  schedule.updateTarget({ prev: true });
-  updateMonthTitle(schedule.month, schedule.year);
+  schedule.setDate(eventsStorage.getEventsMap(), { prev: true });
+  titleElement.innerText = schedule.getMonthYearTitle();
 });
 document.querySelector(".monthpicker__next").addEventListener("click", () => {
-  schedule.updateTarget({ next: true });
-  updateMonthTitle(schedule.month, schedule.year);
+  schedule.setDate(eventsStorage.getEventsMap(), { next: true });
+  titleElement.innerText = schedule.getMonthYearTitle();
 });
 /* NEXT, PREV & CURRENT month buttons */
 
+
 /* HELPERS */
-
-// Updates title with month & year
-function updateMonthTitle(month, year) {
-  const date = new Date(year, month, 1);
-  const formatter = new Intl.DateTimeFormat("ru", {
-    month: "long",
-    year: "numeric"
-  });
-  const dateString = formatter.format(date);
-
-  document.querySelector(".monthpicker__month").innerText =
-    dateString.charAt(0).toUpperCase() + dateString.slice(1);
-}
-
 // Save events, when window closed
 window.addEventListener("beforeunload", () => {
-  schedule.saveToLS();
+  eventsStorage.saveToLS();
 });
-
 // Save events on button click
 document
   .querySelector(".refresh__button")
-  .addEventListener("click", () => schedule.saveToLS());
+  .addEventListener("click", () => eventsStorage.saveToLS());
 /* HELPERS */
+
 
 /* MODALS */
 // Toggle "fast add" modal
@@ -66,7 +67,7 @@ document
   .querySelector(".addeventfast__button")
   .addEventListener("click", () => {
     const input = document.querySelector(".addeventfast__input");
-    const event = schedule.addEventFromString(input.value);
+    const event = eventsStorage.addEvent(DateEvent.fromString(input.value));
 
     input.value = "";
     search.events.push(event);
@@ -81,8 +82,6 @@ document.querySelector(".close-modal-button").addEventListener("click", e => {
 
 /* SEARCH */
 const search_input = document.querySelector(".search__input");
-const search_container = document.querySelector(".search__items");
-const search = new SearchList(search_container, schedule.getEventsArray());
 search_input.addEventListener("input", e => {
   search.updateList(e.target.value);
 });
