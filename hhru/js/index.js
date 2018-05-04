@@ -9,10 +9,16 @@ schedule.update(eventsStorage);
 titleElement.innerText = schedule.getMonthYearTitle();
 
 const searchContainer = document.querySelector(".search__items");
-const search = new SearchList(searchContainer);
+const searchInput = document.querySelector(".search__input");
+const search = new SearchList(searchContainer, (event) => {
+  schedule.setDate(eventsStorage, { date: event.date });
+  titleElement.innerText = schedule.getMonthYearTitle();
+});
+search.update(searchInput.value, eventsStorage);
 
 eventsStorage.onChange((events) => {
   schedule.update(events);
+  search.update(searchInput.value, events);
 });
 
 
@@ -70,7 +76,6 @@ document
     const event = eventsStorage.addEvent(DateEvent.fromString(input.value));
 
     input.value = "";
-    search.events.push(event);
   });
 
 // Hides modal
@@ -81,9 +86,8 @@ document.querySelector(".close-modal-button").addEventListener("click", e => {
 /* MODALS */
 
 /* SEARCH */
-const search_input = document.querySelector(".search__input");
-search_input.addEventListener("input", e => {
-  search.updateList(e.target.value);
+searchInput.addEventListener("input", e => {
+  search.update(e.target.value, eventsStorage);
 });
 const showSearchList = () => {
   document.querySelector(".search__modal").classList.add("modal--show");
@@ -93,6 +97,6 @@ const hideSearchList = () => {
   document.querySelector(".search__modal").classList.remove("modal--show");
   document.querySelector(".search__modal").setAttribute("aria-hidden", "true");
 };
-search_input.addEventListener("focus", showSearchList);
-search_input.addEventListener("blur", hideSearchList);
+searchInput.addEventListener("focus", showSearchList);
+searchInput.addEventListener("blur", hideSearchList);
 /* SEARCH */
