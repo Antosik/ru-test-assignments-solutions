@@ -175,7 +175,7 @@ function Schedule(containerElement) {
       } else {
         month = month - 1;
       }
-    } else if (date && !isNan(date.getTime())) {
+    } else if (date && !isNaN(date.getTime())) {
       month = date.getMonth();
       year = date.getFullYear();
     } else if (today) {
