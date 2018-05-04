@@ -12,17 +12,17 @@ function SearchList(containerElement, itemClickCallback = null) {
       month: "long"
     });
 
-    const inputStr = input.trim();
+    const inputStr = input.trim().toLowerCase();
     const eventsFound =
       inputStr === ""
         ? events
         : events.filter(
             event =>
-              event.title.indexOf(inputStr) !== -1 ||
-              event.description.indexOf(inputStr) !== -1 ||
-              event.participants.filter(man => man.indexOf(inputStr) !== -1)
+              event.title.toLowerCase().indexOf(inputStr) !== -1 ||
+              event.description.toLowerCase().indexOf(inputStr) !== -1 ||
+              event.participants.filter(man => man.toLowerCase().indexOf(inputStr) !== -1)
                 .length > 0 ||
-              formatter.format(event.date).indexOf(inputStr) !== -1
+              formatter.format(event.date).toLowerCase().indexOf(inputStr) !== -1
           );
 
     eventsFound.forEach(event => {
