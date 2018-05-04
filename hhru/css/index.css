@@ -67,10 +67,14 @@ body {
   width: 350px;
 }
 
+.search__input:focus ~ .search__modal {
+  width: 350px;
+}
+
 .search__modal {
   position: absolute;
-  left: 20px;
-  top: calc(100% + 20px);
+  left: 25px;
+  top: calc(100% + 12px);
   background: #fff;
   z-index: 10;
   width: 200px;
@@ -92,16 +96,30 @@ body {
 }
 
 .search__item {
-  margin-top: 4px;
-  padding: 8px;
+  padding: 8px 8px;
   background: #fff;
+  margin: 2px 8px;
   color: #000;
   cursor: pointer;
+  border-bottom: 1px solid #EBEBEB;
 }
 
 .search__item:hover {
   color: #fff;
   background: #27a1ff;
+}
+
+.search__item__title {
+  font-weight: bold;
+}
+
+.search__item__date {
+  color: #666666;
+  font-size: 14px;
+}
+
+.search__item:hover .search__item__date{
+  color: #fff;
 }
 
 .addevent__button[aria-pressed="true"] {

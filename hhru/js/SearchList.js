@@ -25,10 +25,26 @@ function SearchList(containerElement, itemClickCallback = null) {
               formatter.format(event.date).toLowerCase().indexOf(inputStr) !== -1
           );
 
+    const formatterItemDate = new Intl.DateTimeFormat("ru", {
+      day: "numeric",
+      month: "long"
+    });
+    const formatterItemDateTimestamp = new Intl.DateTimeFormat("ru");
     eventsFound.forEach(event => {
       const listItem = document.createElement("li");
       listItem.setAttribute("class", "search__item");
-      listItem.innerText = event.title;
+
+      const itemTitle = document.createElement("div");
+      itemTitle.setAttribute("class", "search__item__title");
+      itemTitle.innerText = event.title;
+
+      const itemDate = document.createElement("time");
+      itemDate.setAttribute("class", "search__item__date");
+      itemDate.setAttribute("datetime", formatterItemDateTimestamp.format(event.date));
+      itemDate.innerText = formatterItemDate.format(event.date);
+
+      listItem.appendChild(itemTitle);
+      listItem.appendChild(itemDate);
       if (itemClickCallback)
         listItem.onmousedown = itemClickCallback.bind(null, event);
 
