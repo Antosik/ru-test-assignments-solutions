@@ -20,9 +20,13 @@ function SearchList(containerElement, itemClickCallback = null) {
             event =>
               event.title.toLowerCase().indexOf(inputStr) !== -1 ||
               event.description.toLowerCase().indexOf(inputStr) !== -1 ||
-              event.participants.filter(man => man.toLowerCase().indexOf(inputStr) !== -1)
-                .length > 0 ||
-              formatter.format(event.date).toLowerCase().indexOf(inputStr) !== -1
+              event.participants.filter(
+                man => man.toLowerCase().indexOf(inputStr) !== -1
+              ).length > 0 ||
+              formatter
+                .format(event.date)
+                .toLowerCase()
+                .indexOf(inputStr) !== -1
           );
 
     const formatterItemDate = new Intl.DateTimeFormat("ru", {
@@ -30,25 +34,30 @@ function SearchList(containerElement, itemClickCallback = null) {
       month: "long"
     });
     const formatterItemDateTimestamp = new Intl.DateTimeFormat("ru");
-    eventsFound.forEach(event => {
-      const listItem = document.createElement("li");
-      listItem.setAttribute("class", "search__item");
+    eventsFound
+      .sort((first, second) => second.date.getTime() - first.date.getTime())
+      .forEach(event => {
+        const listItem = document.createElement("li");
+        listItem.setAttribute("class", "search__item");
 
-      const itemTitle = document.createElement("div");
-      itemTitle.setAttribute("class", "search__item__title");
-      itemTitle.innerText = event.title;
+        const itemTitle = document.createElement("div");
+        itemTitle.setAttribute("class", "search__item__title");
+        itemTitle.innerText = event.title;
 
-      const itemDate = document.createElement("time");
-      itemDate.setAttribute("class", "search__item__date");
-      itemDate.setAttribute("datetime", formatterItemDateTimestamp.format(event.date));
-      itemDate.innerText = formatterItemDate.format(event.date);
+        const itemDate = document.createElement("time");
+        itemDate.setAttribute("class", "search__item__date");
+        itemDate.setAttribute(
+          "datetime",
+          formatterItemDateTimestamp.format(event.date)
+        );
+        itemDate.innerText = formatterItemDate.format(event.date);
 
-      listItem.appendChild(itemTitle);
-      listItem.appendChild(itemDate);
-      if (itemClickCallback)
-        listItem.onmousedown = itemClickCallback.bind(null, event);
+        listItem.appendChild(itemTitle);
+        listItem.appendChild(itemDate);
+        if (itemClickCallback)
+          listItem.onmousedown = itemClickCallback.bind(null, event);
 
-      container.appendChild(listItem);
-    });
+        container.appendChild(listItem);
+      });
   };
 }

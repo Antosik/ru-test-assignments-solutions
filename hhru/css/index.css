@@ -99,7 +99,7 @@ body {
   margin: 2px 8px;
   color: #000;
   cursor: pointer;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
 }
 
 .search__item:hover {
@@ -116,7 +116,7 @@ body {
   font-size: 14px;
 }
 
-.search__item:hover .search__item__date{
+.search__item:hover .search__item__date {
   color: #fff;
 }
 
@@ -138,7 +138,6 @@ body {
   .search__input {
     width: auto;
   }
-
 
   .search__input:focus {
     width: 350px;
