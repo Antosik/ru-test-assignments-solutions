@@ -10,17 +10,16 @@ titleElement.innerText = schedule.getMonthYearTitle();
 
 const searchContainer = document.querySelector(".search__items");
 const searchInput = document.querySelector(".search__input");
-const search = new SearchList(searchContainer, (event) => {
+const search = new SearchList(searchContainer, event => {
   schedule.setDate(eventsStorage, { date: event.date });
   titleElement.innerText = schedule.getMonthYearTitle();
 });
 search.update(searchInput.value, eventsStorage);
 
-eventsStorage.onChange((events) => {
+eventsStorage.onChange(events => {
   schedule.update(events);
   search.update(searchInput.value, events);
 });
-
 
 /* NEXT, PREV & CURRENT month buttons */
 document.querySelector(".today__button").addEventListener("click", () => {
@@ -37,7 +36,6 @@ document.querySelector(".monthpicker__next").addEventListener("click", () => {
 });
 /* NEXT, PREV & CURRENT month buttons */
 
-
 /* HELPERS */
 // Save events, when window closed
 window.addEventListener("beforeunload", () => {
@@ -48,7 +46,6 @@ document
   .querySelector(".refresh__button")
   .addEventListener("click", () => eventsStorage.saveToLS());
 /* HELPERS */
-
 
 /* MODALS */
 // Toggle "fast add" modal
@@ -90,12 +87,14 @@ searchInput.addEventListener("input", e => {
   search.update(e.target.value, eventsStorage);
 });
 const showSearchList = () => {
-  document.querySelector(".search__modal").classList.add("modal--show");
-  document.querySelector(".search__modal").setAttribute("aria-hidden", "false");
+  const modal = document.querySelector(".search__modal");
+  modal.classList.add("modal--show");
+  modal.setAttribute("aria-hidden", "false");
 };
 const hideSearchList = () => {
-  document.querySelector(".search__modal").classList.remove("modal--show");
-  document.querySelector(".search__modal").setAttribute("aria-hidden", "true");
+  const modal = document.querySelector(".search__modal");
+  modal.classList.remove("modal--show");
+  modal.setAttribute("aria-hidden", "true");
 };
 searchInput.addEventListener("focus", showSearchList);
 searchInput.addEventListener("blur", hideSearchList);

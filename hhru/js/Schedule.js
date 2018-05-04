@@ -186,7 +186,7 @@ function Schedule(containerElement) {
 
     this.update(events);
   };
-// Updates title with month & year
+  // Updates title with month & year
   this.getMonthYearTitle = () => {
     const date = new Date(year, month, 1);
     const formatter = new Intl.DateTimeFormat("ru", {
@@ -195,6 +195,6 @@ function Schedule(containerElement) {
     });
     const dateString = formatter.format(date);
 
-   return dateString.charAt(0).toUpperCase() + dateString.slice(1);
-  }
+    return dateString.charAt(0).toUpperCase() + dateString.slice(1);
+  };
 }
