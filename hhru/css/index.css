@@ -151,6 +151,7 @@ body, textarea {
 .main__controls {
   margin-top: 16px;
   display: flex;
+  justify-content: center;
 }
 
 .main__controls__monthpicker {
@@ -170,6 +171,13 @@ body, textarea {
 
 .monthpicker__month {
   font-weight: 500;
+}
+
+
+@media all and (min-width: 768px) {
+  .main__controls {
+    justify-content: flex-start;
+  }
 }
 
 /* MAIN */
