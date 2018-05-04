@@ -59,9 +59,7 @@ function DateEventsStorage(eventsMap = new Map()) {
   let events = eventsMap;
   let changeHandlers = [];
   let onChange = (event, action) =>
-    changeHandlers.forEach(({ callback, type }) =>
-      callback(type === "array" ? this.getEventsArray() : events, event, action)
-    );
+    changeHandlers.forEach(callback => callback(this, event, action));
 
   // Returns all events as Map
   this.getEventsMap = () => events;
@@ -111,8 +109,8 @@ function DateEventsStorage(eventsMap = new Map()) {
   };
 
   // Adds handlers for "change" event
-  this.onChange = (callback, type = "map") => {
-    changeHandlers.push({ callback, type });
+  this.onChange = callback => {
+    changeHandlers.push(callback);
     return this;
   };
 
