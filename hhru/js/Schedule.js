@@ -165,10 +165,7 @@ function Schedule(containerElement) {
     }
   };
   // Switch date
-  this.setDate = (
-    events,
-    { today = true, next = false, prev = false, date = null }
-  ) => {
+  this.setDate = (events, { today, next, prev, date }) => {
     if (next) {
       if (month === 11) {
         month = 0;
@@ -186,7 +183,7 @@ function Schedule(containerElement) {
     } else if (date && !isNaN(date.getTime())) {
       month = date.getMonth();
       year = date.getFullYear();
-    } else if (today) {
+    } else {
       const date = new Date();
       month = date.getMonth();
       year = date.getFullYear();
