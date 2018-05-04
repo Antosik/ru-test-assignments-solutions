@@ -1,11 +1,11 @@
 function DateEvent(title, date, { participants = [], description = "" }) {
-  this.title = title;
+  this.title = title.trim();
   this.date = date;
-  this.participants = participants;
-  this.description = description;
+  this.participants = participants.map(name => name.trim());
+  this.description = description.trim();
 
   this.edit = ({ description = this.description }) => {
-    this.description = description;
+    this.description = description.trim();
   };
 
   this.toString = () => {

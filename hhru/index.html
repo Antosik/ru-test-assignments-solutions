@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div role="dialog" class="addeventfast modal modal--top">
-                <button type="button" class="button close-modal-button addeventfast__close">x</button>
+                <button type="button" class="button close-modal-button addeventfast__close">✖</button>
                 <input type="text" class="input addeventfast__input"
                        placeholder="5 марта, День рождение, Я, Иванов Иван, Петя">
                 <button type="button" class="button addeventfast__button">Создать</button>
@@ -46,12 +46,14 @@
         <div class="schedule-container">
             <table class="schedule"></table>
             <div role="dialog" class="addnew modal">
-                <button type="button" class="button close-modal-button addnew__close">x</button>
-                <input type="text" placeholder="Событие" class="addnew__input">
-                <input type="text" placeholder="День, месяц, год" class="addnew__input">
-                <input type="text" placeholder="Имена участников" class="addnew__input">
-                <textarea placeholder="Имена участников" class="addnew__textbox"></textarea>
-                <button type="button" class="button addnew__button">Добавить</button>
+                <form class="addnew__form" onsubmit="return false;">
+                    <button type="button" class="button close-modal-button addnew__close">✖</button>
+                    <input required type="text" placeholder="Событие" id="addnew__title" class="addnew__input">
+                    <input required type="date" title="Дата события" id="addnew__date" class="addnew__input">
+                    <input type="text" placeholder="Имена участников" id="addnew__participants" class="addnew__input">
+                    <textarea placeholder="Описание" id="addnew__description" class="addnew__textbox"></textarea>
+                    <button type="submit" class="button addnew__button">Добавить</button>
+                </form>
             </div>
         </div>
     </div>

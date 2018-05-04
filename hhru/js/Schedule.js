@@ -27,7 +27,7 @@ function Schedule(containerElement) {
   }
 
   // Return cell element
-  function createCell(date, { head = false, todayCheck = false, events = [], plusClickCallback = null }) {
+  function createCell(date, { head = false, todayCheck = false, events = [] }) {
     const formatterSettings = head
       ? { day: "numeric", weekday: "long" }
       : { day: "numeric" };
@@ -46,7 +46,8 @@ function Schedule(containerElement) {
     addNew.setAttribute("class", "schedule__cell__add");
     addNew.setAttribute("type", "button");
     addNew.innerText = "+";
-    if (plusClickCallback) addNew.addEventListener("click", plusClickCallback.bind(null, event));
+    if (Schedule.plusClickCallback)
+      addNew.addEventListener("click", plusClickCallback.bind(null, date));
     td.appendChild(addNew);
 
     if (head) {
@@ -97,7 +98,7 @@ function Schedule(containerElement) {
   // Getter for year
   this.getYear = () => year;
   // Updates schedule container
-  this.update = (events = new Map(), { plusClickCallback = null }) => {
+  this.update = (events = new Map()) => {
     if (events instanceof DateEventsStorage) events = events.getEventsMap();
 
     container.innerHTML = "";
@@ -127,8 +128,7 @@ function Schedule(containerElement) {
       const cell = createCell(dates[j], {
         head: true,
         todayCheck,
-        events: eventsOnDay,
-        plusClickCallback
+        events: eventsOnDay
       });
       tr.appendChild(cell);
     }
@@ -156,8 +156,7 @@ function Schedule(containerElement) {
 
         const cell = createCell(dates[i * 7 + j], {
           todayCheck,
-          events: eventsOnDay,
-          plusClickCallback
+          events: eventsOnDay
         });
         tr.appendChild(cell);
       }
@@ -207,3 +206,4 @@ function Schedule(containerElement) {
     return dateString.charAt(0).toUpperCase() + dateString.slice(1);
   };
 }
+Schedule.plusClickCallback = null;

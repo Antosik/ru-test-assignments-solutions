@@ -5,7 +5,8 @@ if (window.localStorage.getItem("events")) eventsStorage.loadFromLS();
 
 const scheduleContainer = document.querySelector(".schedule");
 const schedule = new Schedule(scheduleContainer);
-schedule.update(eventsStorage, { plusClickCallback });
+Schedule.plusClickCallback = plusClickCallback;
+schedule.update(eventsStorage);
 titleElement.innerText = schedule.getMonthYearTitle();
 
 const searchContainer = document.querySelector(".search__items");
@@ -18,7 +19,7 @@ const search = new SearchList(searchContainer, event => {
 search.update(searchInput.value, eventsStorage);
 
 eventsStorage.onChange(events => {
-  schedule.update(events, { plusClickCallback });
+  schedule.update(events);
   search.update(searchInput.value, events);
 });
 
@@ -79,12 +80,13 @@ document
 // Hides modal
 document.querySelectorAll(".close-modal-button").forEach(button =>
   button.addEventListener("click", e => {
-    e.target.parentNode.setAttribute("aria-hidden", "true");
-    e.target.parentNode.classList.remove("modal--show");
+    e.target.closest(".modal").setAttribute("aria-hidden", "true");
+    e.target.closest(".modal").classList.remove("modal--show");
   })
 );
 
 const addNewModal = document.querySelector(".addnew");
+// Handler for "+" button
 function plusClickCallback(date, e) {
   const bounds = scheduleContainer.getBoundingClientRect();
   const left = e.clientX - bounds.left;
@@ -93,15 +95,53 @@ function plusClickCallback(date, e) {
     addNewModal.classList.remove("modal--left");
     addNewModal.classList.add("modal--right");
     addNewModal.style.left = `${left - 320}px`;
-    addNewModal.style.top = `${top - 5}px`;
   } else {
     addNewModal.classList.remove("modal--right");
     addNewModal.classList.add("modal--left");
     addNewModal.style.left = `${left + 20}px`;
-    addNewModal.style.top = `${top - 5}px`;
   }
+  addNewModal.style.top = `${top - 5}px`;
   addNewModal.classList.add("modal--show");
+
+  const pad = number => (number < 10 ? `0${number}` : number);
+  document.getElementById("addnew__date").value = `${date.getFullYear()}-${pad(
+    date.getMonth() + 1
+  )}-${pad(date.getDate())}`;
 }
+
+// Adds event from "add" modal
+document.querySelector(".addnew__form").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const title = document.getElementById("addnew__title");
+  const date = document.getElementById("addnew__date");
+  const participants = document.getElementById("addnew__participants");
+  const description = document.getElementById("addnew__description");
+  eventsStorage.addEvent(
+    new DateEvent(title.value, new Date(date.value), {
+      participants: participants.value.split(","),
+      description: description.value
+    })
+  );
+  const dateD = new Date(date.value);
+  console.log(
+    eventsStorage
+      .getEventsMap()
+      .get(dateD.getFullYear())
+      .get(dateD.getMonth())
+  );
+
+  title.value = "";
+  date.value = "";
+  participants.value = "";
+  description.value = "";
+
+  e.target.closest(".modal").setAttribute("aria-hidden", "true");
+  e.target.closest(".modal").classList.remove("modal--show");
+
+  return false;
+});
+
 /* MODALS */
 
 /* SEARCH */
