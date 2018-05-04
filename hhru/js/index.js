@@ -13,6 +13,7 @@ const searchInput = document.querySelector(".search__input");
 const search = new SearchList(searchContainer, event => {
   schedule.setDate(eventsStorage, { date: event.date });
   titleElement.innerText = schedule.getMonthYearTitle();
+  searchInput.value = "";
 });
 search.update(searchInput.value, eventsStorage);
 
