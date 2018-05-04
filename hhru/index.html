@@ -12,18 +12,22 @@
 <header class="header">
     <div class="container">
         <div class="header__controls">
-            <button type="button" role="switch" class="button header__controls__button addevent__button" aria-pressed="false">Добавить</button>
+            <button type="button" role="switch" class="button header__controls__button addevent__button"
+                    aria-pressed="false">Добавить
+            </button>
             <button type="button" class="button header__controls__button refresh__button">Сохранить</button>
             <div class="header__controls__search">
                 <label class="search__label icon icon--search" for="search-input">🔍</label>
-                <input type="text" class="input search__input" placeholder="Событие, дата или участника" id="search-input">
-                <div role="dialog" class="search__modal modal modal--top  modal-show">
+                <input type="text" class="input search__input" placeholder="Событие, дата или участника"
+                       id="search-input">
+                <div role="dialog" class="search__modal modal modal--top">
                     <ul class="search__items"></ul>
                 </div>
             </div>
             <div role="dialog" class="addeventfast modal modal--top">
                 <button type="button" class="button close-modal-button addeventfast__close">x</button>
-                <input type="text" class="input addeventfast__input" placeholder="5 марта, День рождение, Я, Иванов Иван, Петя">
+                <input type="text" class="input addeventfast__input"
+                       placeholder="5 марта, День рождение, Я, Иванов Иван, Петя">
                 <button type="button" class="button addeventfast__button">Создать</button>
             </div>
         </div>
@@ -41,6 +45,14 @@
         </div>
         <div class="schedule-container">
             <table class="schedule"></table>
+            <div role="dialog" class="addnew modal">
+                <button type="button" class="button close-modal-button addnew__close">x</button>
+                <input type="text" placeholder="Событие" class="addnew__input">
+                <input type="text" placeholder="День, месяц, год" class="addnew__input">
+                <input type="text" placeholder="Имена участников" class="addnew__input">
+                <textarea placeholder="Имена участников" class="addnew__textbox"></textarea>
+                <button type="button" class="button addnew__button">Добавить</button>
+            </div>
         </div>
     </div>
 </main>

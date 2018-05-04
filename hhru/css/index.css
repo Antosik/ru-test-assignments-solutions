@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-body {
+body, textarea {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -51,6 +51,7 @@ body {
 .header__controls__search {
   margin-left: 0;
   position: relative;
+  margin-top: 10px;
 }
 
 .search__label {
@@ -70,15 +71,11 @@ body {
 }
 
 .search__modal {
-  position: absolute;
   left: 25px;
   top: calc(100% + 12px);
-  background: #fff;
-  z-index: 10;
   width: 200px;
   height: 275px;
-  box-shadow: #d1d1d1 0 0 4px;
-  border-radius: 4px;
+  padding: 0 !important;
 }
 
 .search__modal::before {
@@ -132,6 +129,7 @@ body {
   }
 
   .header__controls__search {
+    margin-top: 0;
     margin-left: auto;
   }
 

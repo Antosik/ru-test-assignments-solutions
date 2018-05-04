@@ -27,7 +27,7 @@ function Schedule(containerElement) {
   }
 
   // Return cell element
-  function createCell(date, { head = false, todayCheck = false, events = [] }) {
+  function createCell(date, { head = false, todayCheck = false, events = [], plusClickCallback = null }) {
     const formatterSettings = head
       ? { day: "numeric", weekday: "long" }
       : { day: "numeric" };
@@ -41,6 +41,13 @@ function Schedule(containerElement) {
     daySpan.setAttribute("class", "schedule__cell__day");
     daySpan.innerText = formatter.format(date);
     td.appendChild(daySpan);
+
+    const addNew = document.createElement("button");
+    addNew.setAttribute("class", "schedule__cell__add");
+    addNew.setAttribute("type", "button");
+    addNew.innerText = "+";
+    if (plusClickCallback) addNew.addEventListener("click", plusClickCallback.bind(null, event));
+    td.appendChild(addNew);
 
     if (head) {
       td.classList.add("schedule__cell--head");
@@ -90,7 +97,7 @@ function Schedule(containerElement) {
   // Getter for year
   this.getYear = () => year;
   // Updates schedule container
-  this.update = (events = new Map()) => {
+  this.update = (events = new Map(), { plusClickCallback = null }) => {
     if (events instanceof DateEventsStorage) events = events.getEventsMap();
 
     container.innerHTML = "";
@@ -120,7 +127,8 @@ function Schedule(containerElement) {
       const cell = createCell(dates[j], {
         head: true,
         todayCheck,
-        events: eventsOnDay
+        events: eventsOnDay,
+        plusClickCallback
       });
       tr.appendChild(cell);
     }
@@ -148,7 +156,8 @@ function Schedule(containerElement) {
 
         const cell = createCell(dates[i * 7 + j], {
           todayCheck,
-          events: eventsOnDay
+          events: eventsOnDay,
+          plusClickCallback
         });
         tr.appendChild(cell);
       }

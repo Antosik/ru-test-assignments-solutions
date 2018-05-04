@@ -1,5 +1,7 @@
 .schedule-container {
   overflow-x: auto;
+  position: relative;
+  padding-top: 8px;
 }
 
 .schedule-container::-webkit-scrollbar {
@@ -15,6 +17,7 @@
 }
 
 .schedule__cell {
+  position: relative;
   color: #acacac;
   vertical-align: top;
   border: 1px solid #f1f1f1;
@@ -60,4 +63,20 @@
 
 .cell__event__participants {
   font-size: 14px;
+}
+
+.schedule__cell__add {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: #666;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  border-radius: 4px;
+  background: transparent;
+  line-height: 1;
+  cursor: pointer;
 }

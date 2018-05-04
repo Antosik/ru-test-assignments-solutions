@@ -5,7 +5,7 @@ if (window.localStorage.getItem("events")) eventsStorage.loadFromLS();
 
 const scheduleContainer = document.querySelector(".schedule");
 const schedule = new Schedule(scheduleContainer);
-schedule.update(eventsStorage);
+schedule.update(eventsStorage, { plusClickCallback });
 titleElement.innerText = schedule.getMonthYearTitle();
 
 const searchContainer = document.querySelector(".search__items");
@@ -18,7 +18,7 @@ const search = new SearchList(searchContainer, event => {
 search.update(searchInput.value, eventsStorage);
 
 eventsStorage.onChange(events => {
-  schedule.update(events);
+  schedule.update(events, { plusClickCallback });
   search.update(searchInput.value, events);
 });
 
@@ -71,16 +71,37 @@ document
   .querySelector(".addeventfast__button")
   .addEventListener("click", () => {
     const input = document.querySelector(".addeventfast__input");
-    const event = eventsStorage.addEvent(DateEvent.fromString(input.value));
+    eventsStorage.addEvent(DateEvent.fromString(input.value));
 
     input.value = "";
   });
 
 // Hides modal
-document.querySelector(".close-modal-button").addEventListener("click", e => {
-  e.target.parentNode.setAttribute("aria-hidden", "true");
-  e.target.parentNode.classList.remove("modal--show");
-});
+document.querySelectorAll(".close-modal-button").forEach(button =>
+  button.addEventListener("click", e => {
+    e.target.parentNode.setAttribute("aria-hidden", "true");
+    e.target.parentNode.classList.remove("modal--show");
+  })
+);
+
+const addNewModal = document.querySelector(".addnew");
+function plusClickCallback(date, e) {
+  const bounds = scheduleContainer.getBoundingClientRect();
+  const left = e.clientX - bounds.left;
+  const top = e.clientY - bounds.top;
+  if (300 + e.screenX > scheduleContainer.offsetWidth) {
+    addNewModal.classList.remove("modal--left");
+    addNewModal.classList.add("modal--right");
+    addNewModal.style.left = `${left - 320}px`;
+    addNewModal.style.top = `${top - 5}px`;
+  } else {
+    addNewModal.classList.remove("modal--right");
+    addNewModal.classList.add("modal--left");
+    addNewModal.style.left = `${left + 20}px`;
+    addNewModal.style.top = `${top - 5}px`;
+  }
+  addNewModal.classList.add("modal--show");
+}
 /* MODALS */
 
 /* SEARCH */
