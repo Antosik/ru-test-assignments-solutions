@@ -61,7 +61,7 @@ function SearchList(containerElement, eventsSource) {
         listItem.appendChild(itemTitle);
         listItem.appendChild(itemDate);
         if (SearchList.itemClickCallback)
-          listItem.addEventListener("click", function (e) {
+          listItem.addEventListener("mousedown", function (e) {
             const element = this;
             SearchList.itemClickCallback(e, event, element);
           });
@@ -70,6 +70,6 @@ function SearchList(containerElement, eventsSource) {
       });
   };
 
-  this.update(input);
+  this.setInput(input);
 }
 SearchList.itemClickCallback = null;
