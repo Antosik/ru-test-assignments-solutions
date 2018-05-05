@@ -1,4 +1,3 @@
-
 const titleElement = document.querySelector(".monthpicker__month");
 
 const eventsStorage = new DateEventsStorage();
@@ -12,17 +11,8 @@ titleElement.innerText = schedule.getMonthYearTitle();
 
 const searchContainer = document.querySelector(".search__items");
 const searchInput = document.querySelector(".search__input");
-const search = new SearchList(searchContainer, event => {
-  schedule.setDate(eventsStorage, { date: event.date });
-  titleElement.innerText = schedule.getMonthYearTitle();
-  searchInput.value = "";
-});
-search.update(searchInput.value, eventsStorage);
-
-eventsStorage.onChange(events => {
-  schedule.update(events);
-  search.update(searchInput.value, events);
-});
+SearchList.itemClickCallback = searchItemClickCallback;
+const search = new SearchList(searchContainer, eventsStorage);
 
 /* NEXT, PREV & CURRENT month buttons */
 document.querySelector(".today__button").addEventListener("click", () => {
@@ -181,8 +171,13 @@ function showEventInfo(event, eventItem) {
 /* MODALS */
 
 /* SEARCH */
+function searchItemClickCallback(event) {
+  schedule.setDate(eventsStorage, { date: event.date });
+  titleElement.innerText = schedule.getMonthYearTitle();
+  searchInput.value = "";
+}
 searchInput.addEventListener("input", e => {
-  search.update(e.target.value, eventsStorage);
+  search.setInput(e.target.value);
 });
 const showSearchList = () => {
   const modal = document.querySelector(".search__modal");

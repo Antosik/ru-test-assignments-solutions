@@ -1,9 +1,14 @@
-function SearchList(containerElement, itemClickCallback = null) {
+function SearchList(containerElement, eventsSource) {
   let container = containerElement;
+  let input = "";
 
-  this.update = (input = "", events = []) => {
+  this.setInput = (value) => {
+    input = value;
+    this.update(input);
+  };
+  this.update = () => {
     container.innerHTML = "";
-    if (events instanceof DateEventsStorage) events = events.getEventsArray();
+    const events = eventsSource.getEventsArray();
 
     const formatter = new Intl.DateTimeFormat("ru", {
       day: "numeric",
@@ -54,10 +59,16 @@ function SearchList(containerElement, itemClickCallback = null) {
 
         listItem.appendChild(itemTitle);
         listItem.appendChild(itemDate);
-        if (itemClickCallback)
-          listItem.onmousedown = itemClickCallback.bind(null, event);
+        if (SearchList.itemClickCallback)
+          listItem.addEventListener("click", function () {
+            const element = this;
+            SearchList.itemClickCallback(event, element);
+          });
 
         container.appendChild(listItem);
       });
   };
+
+  this.update(input);
 }
+SearchList.itemClickCallback = null;
