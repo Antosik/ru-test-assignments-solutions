@@ -2,6 +2,7 @@ function SearchList(containerElement, eventsSource) {
   let container = containerElement;
   let input = "";
 
+
   this.setInput = (value) => {
     input = value;
     this.update(input);
@@ -60,9 +61,9 @@ function SearchList(containerElement, eventsSource) {
         listItem.appendChild(itemTitle);
         listItem.appendChild(itemDate);
         if (SearchList.itemClickCallback)
-          listItem.addEventListener("click", function () {
+          listItem.addEventListener("click", function (e) {
             const element = this;
-            SearchList.itemClickCallback(event, element);
+            SearchList.itemClickCallback(e, event, element);
           });
 
         container.appendChild(listItem);
