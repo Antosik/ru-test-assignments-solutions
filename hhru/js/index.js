@@ -194,7 +194,10 @@ const searchInput = document.querySelector(".search__input");
 function searchItemClickCallback(e, event) {
   schedule.setDate({ date: event.date });
   titleElement.innerText = schedule.getMonthYearTitle();
-  searchInput.value = "";
+
+  search.setInput("");
+  const searchModal = document.querySelector(".search__modal");
+  hideModal(searchModal);
 }
 searchInput.addEventListener("input", e => {
   search.setInput(e.target.value);
