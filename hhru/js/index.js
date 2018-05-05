@@ -52,7 +52,8 @@ document.addEventListener("click", e => {
 
 /* MODALS */
 function showModal(modalElement) {
-  hideModal(document.querySelector(".modal--show"));
+  if (document.querySelector(".modal--show"))
+    hideModal(document.querySelector(".modal--show"));
 
   modalElement.classList.add("modal--show");
   modalElement.setAttribute("aria-hidden", "false");
@@ -85,7 +86,6 @@ document.querySelectorAll(".close-modal-button").forEach(button =>
     hideModal(e.target.closest(".modal"));
   })
 );
-
 
 // Handler for "+" button
 const addNewModal = document.querySelector(".addnew");
