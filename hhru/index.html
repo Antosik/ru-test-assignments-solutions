@@ -55,6 +55,18 @@
                     <button type="submit" class="button addnew__button">Добавить</button>
                 </form>
             </div>
+            <div role="dialog" class="eventinfo modal">
+                <button type="button" class="button close-modal-button addnew__close">✖</button>
+                <div class="eventinfo__title"></div>
+                <time class="eventinfo__date"></time>
+                <div>
+                    <div class="eventinfo__span">Участники</div>
+                    <div class="eventinfo__participants"></div>
+                </div>
+                <textarea placeholder="Описание" id="eventinfo__description" class="eventinfo__textbox"></textarea>
+                <button type="button" class="button eventinfo__button eventinfo__save">Готово</button>
+                <button type="button" class="button eventinfo__button eventinfo__delete">Удалить</button>
+            </div>
         </div>
     </div>
 </main>

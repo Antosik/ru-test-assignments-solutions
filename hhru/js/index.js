@@ -6,6 +6,7 @@ if (window.localStorage.getItem("events")) eventsStorage.loadFromLS();
 const scheduleContainer = document.querySelector(".schedule");
 const schedule = new Schedule(scheduleContainer);
 Schedule.plusClickCallback = plusClickCallback;
+Schedule.eventClickCallback = showEventInfo;
 schedule.update(eventsStorage);
 titleElement.innerText = schedule.getMonthYearTitle();
 
@@ -141,6 +142,46 @@ document.querySelector(".addnew__form").addEventListener("submit", e => {
 
   return false;
 });
+
+const eventInfoModal = document.querySelector(".eventinfo");
+// Handler for click on event
+function showEventInfo(event, eventItem) {
+  const bounds = scheduleContainer.getBoundingClientRect();
+  const bounds2 = eventItem.getBoundingClientRect();
+  const left = bounds2.left - bounds.left;
+  const top = bounds2.top - bounds.top;
+
+  if (300 + bounds2.left > scheduleContainer.offsetWidth) {
+    eventInfoModal.classList.remove("modal--left");
+    eventInfoModal.classList.add("modal--right");
+    eventInfoModal.style.left = `${left - 320}px`;
+  } else {
+    eventInfoModal.classList.remove("modal--right");
+    eventInfoModal.classList.add("modal--left");
+    eventInfoModal.style.left = `${left + bounds2.width}px`;
+  }
+
+  eventInfoModal.style.top = `${top + bounds2.height / 2 - 5}px`;
+  eventInfoModal.classList.add("modal--show");
+
+  const formatter = new Intl.DateTimeFormat("ru", {
+    day: "numeric",
+    month: "long"
+  });
+  eventInfoModal.querySelector(".eventinfo__title").innerText = event.title;
+  eventInfoModal.querySelector(".eventinfo__date").innerText = formatter.format(event.date);
+  eventInfoModal.querySelector(".eventinfo__participants").innerText = event.participantsToString() || "Нет";
+  eventInfoModal.querySelector(".eventinfo__textbox").value = event.description;
+  eventInfoModal.querySelector(".eventinfo__save").onclick = () => {
+    event.edit({ description: eventInfoModal.querySelector(".eventinfo__textbox").value });
+  };
+  eventInfoModal.querySelector(".eventinfo__delete").onclick = () => {
+    eventsStorage.deleteEvent(event);
+
+    eventInfoModal.setAttribute("aria-hidden", "true");
+    eventInfoModal.classList.remove("modal--show");
+  };
+}
 
 /* MODALS */
 

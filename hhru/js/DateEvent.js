@@ -108,6 +108,33 @@ function DateEventsStorage(eventsMap = new Map()) {
     return event;
   };
 
+  this.deleteEvent = event => {
+    const year = event.date.getFullYear();
+    const month = event.date.getMonth();
+    const day = event.date.getDate();
+
+    if (
+      !events.has(year) ||
+      !events.get(year).has(month) ||
+      !events
+        .get(year)
+        .get(month)
+        .has(day)
+    )
+      return null;
+
+    const dayEvents = events
+      .get(year)
+      .get(month)
+      .get(day);
+    const index = dayEvents.indexOf(event);
+    if (index > -1) {
+      dayEvents.splice(index, 1);
+    }
+
+    onChange(event, "remove");
+  };
+
   // Adds handlers for "change" event
   this.onChange = callback => {
     changeHandlers.push(callback);

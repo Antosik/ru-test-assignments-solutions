@@ -76,6 +76,11 @@ function Schedule(containerElement) {
     events.forEach(event => {
       const item = document.createElement("li");
       item.setAttribute("class", "cell__event");
+      if (Schedule.eventClickCallback)
+        item.addEventListener("click", function () {
+          const ctx = this;
+          Schedule.eventClickCallback(event, ctx);
+        });
 
       const itemTitle = document.createElement("div");
       itemTitle.setAttribute("class", "cell__event__title");
@@ -204,3 +209,4 @@ function Schedule(containerElement) {
   };
 }
 Schedule.plusClickCallback = null;
+Schedule.eventClickCallback = null;

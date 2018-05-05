@@ -43,6 +43,7 @@
 .cell__event {
   margin: 4px 0;
   color: #666;
+  cursor: pointer;
 }
 
 .cell__events {

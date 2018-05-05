@@ -122,3 +122,47 @@
 }
 
 /* ADD NEW */
+
+/* ADD NEW */
+.eventinfo {
+  width: 300px;
+  height: 300px;
+  padding: 16px;
+}
+
+.eventinfo__title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.eventinfo__date {
+  font-size: 14px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.eventinfo__span {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.eventinfo__textbox {
+  box-shadow: inset #d1d1d1 0 2px;
+  border: #d1d1d1 1px solid;
+  padding: 6px 12px;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 4px;
+  margin-top: 28px;
+  height: 100px;
+  resize: none;
+}
+
+.eventinfo__button {
+  background: #fff;
+  border: 1px #e7e7e7 solid;
+  padding: 2px 6px;
+}
+
+/* ADD NEW */
