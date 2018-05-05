@@ -16,6 +16,11 @@ const searchContainer = document.querySelector(".search__items");
 SearchList.itemClickCallback = searchItemClickCallback;
 const search = new SearchList(searchContainer, eventsStorage);
 
+eventsStorage.onChange(() => {
+  search.update();
+  schedule.update();
+});
+
 /* NEXT, PREV & CURRENT month buttons */
 document.querySelector(".today__button").addEventListener("click", () => {
   schedule.setDate({ today: true });
@@ -84,6 +89,7 @@ document
 document.querySelectorAll(".close-modal-button").forEach(button =>
   button.addEventListener("click", e => {
     hideModal(e.target.closest(".modal"));
+    e.stopPropagation();
   })
 );
 
