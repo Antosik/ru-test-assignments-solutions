@@ -78,7 +78,28 @@ function DateEventsStorage(eventsMap = new Map()) {
     return eventsCollection;
   };
 
-  // Adds event to list
+  this.getEventOnDate = date => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+
+    if (
+      !events.has(year) ||
+      !events.get(year).has(month) ||
+      !events
+        .get(year)
+        .get(month)
+        .has(day)
+    )
+      return [];
+
+    return events
+      .get(year)
+      .get(month)
+      .get(day);
+  };
+
+  // Adds event to storage
   this.addEvent = event => {
     const year = event.date.getFullYear();
     const month = event.date.getMonth();
@@ -108,31 +129,15 @@ function DateEventsStorage(eventsMap = new Map()) {
     return event;
   };
 
+  // Delete event from storage
   this.deleteEvent = event => {
-    const year = event.date.getFullYear();
-    const month = event.date.getMonth();
-    const day = event.date.getDate();
+    const dayEvents = this.getEventOnDate(event.date);
 
-    if (
-      !events.has(year) ||
-      !events.get(year).has(month) ||
-      !events
-        .get(year)
-        .get(month)
-        .has(day)
-    )
-      return null;
-
-    const dayEvents = events
-      .get(year)
-      .get(month)
-      .get(day);
     const index = dayEvents.indexOf(event);
     if (index > -1) {
       dayEvents.splice(index, 1);
+      onChange(event, "remove");
     }
-
-    onChange(event, "remove");
   };
 
   // Adds handlers for "change" event
