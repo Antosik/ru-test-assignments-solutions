@@ -145,7 +145,7 @@ function Schedule(containerElement, eventsSource = null) {
     }
   };
   // Switch date
-  this.setDate = (events, { today, next, prev, date }) => {
+  this.setDate = ({ today, next, prev, date }) => {
     if (next) {
       if (month === 11) {
         month = 0;
@@ -169,7 +169,7 @@ function Schedule(containerElement, eventsSource = null) {
       year = date.getFullYear();
     }
 
-    this.update(events);
+    this.update();
   };
   // Updates title with month & year
   this.getMonthYearTitle = () => {
