@@ -88,20 +88,22 @@ document.querySelectorAll(".close-modal-button").forEach(button =>
 
 const addNewModal = document.querySelector(".addnew");
 // Handler for "+" button
-function plusClickCallback(date, e) {
+function plusClickCallback(date, plusButton) {
   const bounds = scheduleContainer.getBoundingClientRect();
-  const left = e.clientX - bounds.left;
-  const top = e.clientY - bounds.top;
-  if (300 + e.screenX > scheduleContainer.offsetWidth) {
+  const bounds2 = plusButton.getBoundingClientRect();
+  const left = bounds2.left - bounds.left;
+  const top = bounds2.top - bounds.top;
+
+  if (300 + bounds2.left > scheduleContainer.offsetWidth) {
     addNewModal.classList.remove("modal--left");
     addNewModal.classList.add("modal--right");
     addNewModal.style.left = `${left - 320}px`;
   } else {
     addNewModal.classList.remove("modal--right");
     addNewModal.classList.add("modal--left");
-    addNewModal.style.left = `${left + 20}px`;
+    addNewModal.style.left = `${left + bounds2.width + 20}px`;
   }
-  addNewModal.style.top = `${top - 5}px`;
+  addNewModal.style.top = `${top + bounds2.height / 2 - 5}px`;
   addNewModal.classList.add("modal--show");
 
   const pad = number => (number < 10 ? `0${number}` : number);

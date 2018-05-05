@@ -46,9 +46,11 @@ function Schedule(containerElement, eventsSource = null) {
     addNew.setAttribute("class", "schedule__cell__add");
     addNew.setAttribute("type", "button");
     addNew.innerText = "+";
-
     if (Schedule.plusClickCallback)
-      addNew.addEventListener("click", Schedule.plusClickCallback.bind(null, date));
+      addNew.addEventListener("click", function () {
+        const element = this;
+        Schedule.plusClickCallback(date, element);
+      });
     td.appendChild(addNew);
 
     if (head) {
@@ -78,9 +80,9 @@ function Schedule(containerElement, eventsSource = null) {
       const item = document.createElement("li");
       item.setAttribute("class", "cell__event");
       if (Schedule.eventClickCallback)
-        item.addEventListener("click", function() {
-          const ctx = this;
-          Schedule.eventClickCallback(event, ctx);
+        item.addEventListener("click", function () {
+          const element = this;
+          Schedule.eventClickCallback(event, element);
         });
 
       const itemTitle = document.createElement("div");
