@@ -1,13 +1,13 @@
+
 const titleElement = document.querySelector(".monthpicker__month");
 
 const eventsStorage = new DateEventsStorage();
 if (window.localStorage.getItem("events")) eventsStorage.loadFromLS();
 
 const scheduleContainer = document.querySelector(".schedule");
-const schedule = new Schedule(scheduleContainer);
 Schedule.plusClickCallback = plusClickCallback;
 Schedule.eventClickCallback = showEventInfo;
-schedule.update(eventsStorage);
+const schedule = new Schedule(scheduleContainer, eventsStorage);
 titleElement.innerText = schedule.getMonthYearTitle();
 
 const searchContainer = document.querySelector(".search__items");
@@ -123,13 +123,6 @@ document.querySelector(".addnew__form").addEventListener("submit", e => {
       participants: participants.value.split(","),
       description: description.value
     })
-  );
-  const dateD = new Date(date.value);
-  console.log(
-    eventsStorage
-      .getEventsMap()
-      .get(dateD.getFullYear())
-      .get(dateD.getMonth())
   );
 
   title.value = "";

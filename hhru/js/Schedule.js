@@ -1,4 +1,4 @@
-function Schedule(containerElement) {
+function Schedule(containerElement, eventsSource = null) {
   let container = containerElement;
 
   const today = new Date();
@@ -46,8 +46,9 @@ function Schedule(containerElement) {
     addNew.setAttribute("class", "schedule__cell__add");
     addNew.setAttribute("type", "button");
     addNew.innerText = "+";
+
     if (Schedule.plusClickCallback)
-      addNew.addEventListener("click", plusClickCallback.bind(null, date));
+      addNew.addEventListener("click", Schedule.plusClickCallback.bind(null, date));
     td.appendChild(addNew);
 
     if (head) {
@@ -77,7 +78,7 @@ function Schedule(containerElement) {
       const item = document.createElement("li");
       item.setAttribute("class", "cell__event");
       if (Schedule.eventClickCallback)
-        item.addEventListener("click", function () {
+        item.addEventListener("click", function() {
           const ctx = this;
           Schedule.eventClickCallback(event, ctx);
         });
@@ -103,8 +104,8 @@ function Schedule(containerElement) {
   // Getter for year
   this.getYear = () => year;
   // Updates schedule container
-  this.update = (events = new Map()) => {
-    if (events instanceof DateEventsStorage) events = events.getEventsMap();
+  this.update = () => {
+    let events = eventsSource ? eventsSource.getEventsMap() : null;
 
     container.innerHTML = "";
     const dates = getDatesToShow();
@@ -114,21 +115,7 @@ function Schedule(containerElement) {
 
     const tr = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
-      const year = dates[j].getFullYear();
-      const month = dates[j].getMonth();
-      const day = dates[j].getDate();
-      let eventsOnDay =
-        (events.has(year) &&
-          events.get(year).has(month) &&
-          events
-            .get(year)
-            .get(month)
-            .has(day) &&
-          events
-            .get(year)
-            .get(month)
-            .get(day)) ||
-        [];
+      let eventsOnDay = eventsSource.getEventOnDate(dates[j]);
 
       const cell = createCell(dates[j], {
         head: true,
@@ -143,21 +130,7 @@ function Schedule(containerElement) {
       const tr = document.createElement("tr");
 
       for (let j = 0; j < 7; j++) {
-        const year = dates[i * 7 + j].getFullYear();
-        const month = dates[i * 7 + j].getMonth();
-        const day = dates[i * 7 + j].getDate();
-        let eventsOnDay =
-          (events.has(year) &&
-            events.get(year).has(month) &&
-            events
-              .get(year)
-              .get(month)
-              .has(day) &&
-            events
-              .get(year)
-              .get(month)
-              .get(day)) ||
-          [];
+        let eventsOnDay = eventsSource.getEventOnDate(dates[i * 7 + j]);
 
         const cell = createCell(dates[i * 7 + j], {
           todayCheck,
@@ -207,6 +180,8 @@ function Schedule(containerElement) {
 
     return dateString.charAt(0).toUpperCase() + dateString.slice(1);
   };
+
+  this.update();
 }
 Schedule.plusClickCallback = null;
 Schedule.eventClickCallback = null;
