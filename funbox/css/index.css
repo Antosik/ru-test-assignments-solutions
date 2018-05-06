@@ -21,19 +21,28 @@ body {
   font-family: "Exo 2.0 Thin", sans-serif;
   text-align: center;
   margin: 20px 0;
+  font-size: 1.75em;
 }
 
 .goods {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .product {
-  width: 320px;
   color: #000;
   position: relative;
   display: flex;
+  flex-direction: column;
   margin: 10px;
+  width: 320px;
+}
+
+.product__card {
+  position: relative;
+  display: flex;
+  height: 425px;
 }
 
 .product__corner {
@@ -41,7 +50,7 @@ body {
   height: calc(100% - 31px);
   background: #f2f2f2;
   border-width: 0 0 4px 4px;
-  border-bottom-left-radius: 13px;
+  border-bottom-left-radius: 8px;
   border-style: solid;
   width: 36px;
   top: 35px;
@@ -54,10 +63,10 @@ body {
   height: 50px;
   position: absolute;
   left: 8px;
-  top: -26px;
+  top: -25px;
   background: #f2f2f2;
   border-style: solid;
-  border-width: 4px 0 0 0;
+  border-width: 3px 0 0 0;
   transform: rotate(-45deg);
 }
 
@@ -69,8 +78,8 @@ body {
   border-width: 4px 4px 4px 0;
   border-style: solid;
   background: #f2f2f2;
-  border-bottom-right-radius: 13px;
-  border-top-right-radius: 13px;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .product__line {
@@ -91,13 +100,13 @@ body {
 }
 
 .product__image {
-  width: calc(100% + 48px);
-  position: relative;
-  left: -36px;
+  width: calc(100% + 32px);
+  position: absolute;
+  left: -32px;
+  bottom: 0;
   font-size: 0;
-  margin-bottom: -4px;
-  border-bottom-right-radius: 13px;
-  border-bottom-left-radius: 13px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .product__weight {
@@ -120,13 +129,10 @@ body {
 }
 
 .product__additional {
-  position: absolute;
-  bottom: -60px;
   color: #fff;
   text-align: center;
   height: 50px;
-  width: calc(100% + 15px);
-  left: -25px;
+  margin-top: 8px;
 }
 
 .product--blue,
@@ -174,4 +180,10 @@ body {
 
 .product--ended .product__additional {
   color: #ffff66;
+}
+
+@media all and (min-width: 768px) {
+  .title {
+    font-size: 2em;
+  }
 }
