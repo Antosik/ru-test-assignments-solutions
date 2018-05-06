@@ -20,29 +20,30 @@ body {
 .title {
     font-family: "Exo 2.0 Thin", sans-serif;
     text-align: center;
+    margin: 20px 0;
 }
 
 .goods {
-    margin: 40px;
+    display: flex;
+    justify-content: center;
 }
 
 .product {
-    background: #f2f2f2;
-    width: 284px;
+    width: 320px;
     color: #000;
     position: relative;
-    border-width: 4px 4px 4px 0;
-    border-style: solid;
-    border-color: #b3b3b3;
+    display: flex;
 }
 
 .product__corner {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    position: relative;
+    height: calc(100% - 31px);
+    background: #f2f2f2;
+    border-width: 0 0 4px 4px;
+    border-bottom-left-radius: 13px;
+    border-style: solid;
+    width: 36px;
+    top: 35px;
 }
 
 .product__corner:before {
@@ -50,38 +51,25 @@ body {
     display: block;
     width: 50px;
     height: 50px;
-
     position: absolute;
-    left: -23px;
-    top: 6px;
-
+    left: 8px;
+    top: -26px;
     background: #f2f2f2;
     border-style: solid;
     border-width: 4px 0 0 0;
     transform: rotate(-45deg);
 }
 
-.product__corner:after {
-    content: "";
-    display: block;
-    width: 32px;
-    height: calc(100% - 32px);
-
-    position: absolute;
-    left: -34px;
-    top: 32px;
-
-    background: #f2f2f2;
-    border-width: 0 0 4px 4px;
-    border-bottom-left-radius: 13px;
-    border-style: solid;
-}
-
 .product__info {
     position: relative;
-    z-index: 2;
     padding: 20px 12px 0 4px;
     margin-bottom: -4px;
+    width: calc(100% - 42px);
+    border-width: 4px 4px 4px 0;
+    border-style: solid;
+    background: #f2f2f2;
+    border-bottom-right-radius: 13px;
+    border-top-right-radius: 13px;
 }
 
 .product__line {
@@ -101,10 +89,13 @@ body {
 }
 
 .product__image {
-    width: calc(100% + 46px);
+    width: calc(100% + 48px);
     position: relative;
-    left: -34px;
+    left: -36px;
     font-size: 0;
+    margin-bottom: -4px;
+    border-bottom-right-radius: 13px;
+    border-bottom-left-radius: 13px;
 }
 
 .product__weight {
@@ -133,14 +124,14 @@ body {
     text-align: center;
 }
 
-.product--blue, .product--blue .product__corner:before, .product--blue .product__corner:after {
+.product--blue, .product--blue .product__corner:before, .product--blue .product__corner, .product--blue .product__info {
     border-color: #1697d9;
 }
 .product--blue .product__weight {
     background: #1697d9;
 }
 
-.product--pink, .product--pink .product__corner:before, .product--pink .product__corner:after, .product--pink .product__weight {
+.product--pink, .product--pink .product__corner:before, .product--pink .product__corner, .product--pink .product__info {
     border-color: #d91667;
 }
 .product--pink .product__weight {
