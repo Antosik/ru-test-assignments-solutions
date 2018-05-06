@@ -152,3 +152,15 @@ body {
 .product--pink .product__weight {
     background: #d91667;
 }
+
+.product--ended, .product--ended .product__line, .product--ended .product__description {
+    color: #B2B2B2;
+}
+
+.product--ended .product__weight {
+    background: #B2B2B2;
+}
+
+.product--ended .product__additional {
+    color: #FFFF66;
+}
