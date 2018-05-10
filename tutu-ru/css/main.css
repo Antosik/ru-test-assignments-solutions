@@ -49,6 +49,10 @@ h1, h2, h3 {
     text-align: center;
 }
 
+h1 {
+    margin: 1em 0;
+}
+
 .task h3 {
     margin: 0 0 1em 0;
 }
