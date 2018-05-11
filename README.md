@@ -11,4 +11,9 @@
 * [FunBox](http://funbox.ru/)
   * HTML/CSS-разработчик
     * [Задание](https://dl.fun-box.ru/qt-htmlcss.zip)
-    * [Решение](https://github.com/Antosik/ru-test-assignments-solutions/tree/master/funbox) ([**Демо**](https://antosik.github.io/ru-test-assignments-solutions/funbox/)
+    * [Решение](https://github.com/Antosik/ru-test-assignments-solutions/tree/master/funbox) ([**Демо**](https://antosik.github.io/ru-test-assignments-solutions/funbox/))
+
+* [Tutu.ru](https://www.tutu.ru/)
+  * Front End
+    * [Задание](https://github.com/tutu-ru/frontend-javascript-test)
+    * [Решение](https://github.com/Antosik/ru-test-assignments-solutions/tree/master/tutu-ru) ([**Демо**](https://antosik.github.io/ru-test-assignments-solutions/tutu-ru/))
