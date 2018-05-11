@@ -31,25 +31,67 @@
 /* LOADER */
 
 /* TABLE STYLES */
-.table {
+.datatable {
     width: 100%;
     max-width: 100%;
+    border-collapse: collapse;
 }
 
-.table th {
+.datatable th {
     text-align: left;
 }
 
-.table th, .table td {
+.datatable th, .datatable td {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
     border-top: 1px solid #ddd;
 }
 
-.table > thead > tr > th {
+.datatable tbody tr:not(:last-child) {
+    cursor: pointer;
+}
+
+.datatable tr:not(:last-child):hover {
+    background-color: #f5f5f5;
+}
+
+.datatable > thead > tr > th {
     vertical-align: bottom;
     border-bottom: 2px solid #ddd;
+}
+
+.datatable__pagination {
+    text-align: center;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.datatable__pagination ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.datatable__pagination__item button{
+    padding: 8px 16px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #666;
+    border-radius: 4px;
+    transition: background 0.2s ease-out;
+    cursor: pointer;
+    margin: 0 4px;
+}
+
+.datatable__pagination__item button:hover {
+     background: #000;
+     color: #fff;
+ }
+
+.datatable__pagination__item button[aria-current="true"] {
+    background: #000;
+    color: #fff;
 }
 
 /* TABLE STYLES */

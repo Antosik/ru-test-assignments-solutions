@@ -15,6 +15,7 @@ interface IDataItem {
 
 class DataTable {
     static MAX_ROWS_ON_PAGE = 50;
+    private static headings = ["id", "firstName", "lastName", "email", "phone"];
 
     private data: IDataItem[];
     private page: number;
@@ -49,7 +50,7 @@ class DataTable {
         const table = document.createElement("table");
         table.setAttribute("class", "datatable");
 
-        const heading = DataTable.getHeading();
+        const heading = this.getHeading();
         table.appendChild(heading);
 
         const tbody = document.createElement("tbody");
@@ -70,11 +71,14 @@ class DataTable {
         }
 
         table.appendChild(tbody);
+
+        const footer = this.getFooter();
+        table.appendChild(footer);
+
         this.container.appendChild(table);
     }
 
-    private static headings = ["id", "firstName", "lastName", "email", "phone"];
-    private static getHeading(): Element {
+    private getHeading(): Element {
         const thead = document.createElement("thead");
         thead.setAttribute("class", "datatable__head");
 
@@ -86,5 +90,57 @@ class DataTable {
         }
 
         return thead;
+    }
+    private getFooter(): Element {
+        const tfoot = document.createElement("tfoot");
+        tfoot.setAttribute("class", "datatable__tfoot");
+
+        const row = document.createElement("tr");
+
+        const cell = document.createElement("td");
+        cell.setAttribute("colspan", DataTable.headings.length.toString());
+
+        const pagination = this.getPagination();
+
+        cell.appendChild(pagination);
+
+        row.appendChild(cell);
+
+        tfoot.appendChild(row);
+
+        return tfoot;
+    }
+
+    private getPagination(): Element {
+        const count = Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
+        const nav = document.createElement("nav");
+        nav.setAttribute("class", "datatable__pagination");
+
+        const ul = document.createElement("ul");
+
+        for (let i = 0; i < count; i++) {
+            const isCurrentPage = i === this.page;
+
+            const li = document.createElement("li");
+            li.setAttribute("class", "datatable__pagination__item");
+
+            const button = document.createElement("button");
+            button.setAttribute("type", "button");
+            button.setAttribute("aria-label", isCurrentPage ? `Page ${i + 1}, current page` : `Go to page ${i + 1}`);
+            button.setAttribute("aria-current", String(isCurrentPage));
+            button.addEventListener("click", () => {
+                this.page = i;
+                this.renderTable();
+            });
+            button.innerText = (i + 1).toString();
+
+            li.appendChild(button);
+
+            ul.appendChild(li);
+        }
+
+        nav.appendChild(ul);
+
+        return nav;
     }
 }
