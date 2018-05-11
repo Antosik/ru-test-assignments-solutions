@@ -115,6 +115,13 @@ class DataTable {
             : this.data.slice(this.page * DataTable.MAX_ROWS_ON_PAGE, (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE);
         for (let dataItem of data) {
             const tr = document.createElement("tr");
+            tr.addEventListener("mousedown", () => {
+                const block = this.showAdditionalInfo(dataItem);
+                if (this.container.querySelector(".datatable__additional"))
+                    this.container.removeChild(this.container.querySelector(".datatable__additional"));
+                this.container.appendChild(block);
+                block.scrollIntoView();
+            });
             for (let heading of DataTable.headings) {
                 const td = document.createElement("td");
                 td.innerText = dataItem[heading];
@@ -122,11 +129,11 @@ class DataTable {
             }
             tbody.appendChild(tr);
         }
-        if (document.querySelector(".datatable__tfoot"))
-            table.removeChild(document.querySelector(".datatable__tfoot"));
+        if (table.querySelector(".datatable__tfoot"))
+            table.removeChild(table.querySelector(".datatable__tfoot"));
         const footer = this.getFooter();
+        table.appendChild(tbody);
         table.appendChild(footer);
-        this.container.appendChild(table);
     }
     getHeader() {
         const headingRow = this.getHeading();
@@ -220,6 +227,21 @@ class DataTable {
         return DataTable.createElement("nav", {
             class: "datatable__pagination"
         }, [ul]);
+    }
+    showAdditionalInfo(item) {
+        const div = DataTable.createElement("div", {
+            class: "datatable__additional"
+        });
+        div.innerHTML = `Выбран пользователь <b>${item.firstName} ${item.lastName}</b><br/>
+Описание:<br/>
+<textarea readonly>
+${item.description}
+</textarea><br/>
+Адрес проживания: <b>${item.address.streetAddress}</b><br/>
+Город: <b>${item.address.city}</b><br>
+Провинция/штат: <b>${item.address.state}</b><br/>
+Индекс: <b>${item.address.zip}</b>`;
+        return div;
     }
     static createElement(tag, attributes = {}, childrens = []) {
         const element = document.createElement(tag);
