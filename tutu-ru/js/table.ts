@@ -13,6 +13,12 @@ interface IDataItem {
   description: string;
 }
 
+const enum orderDirection {
+  asc = "asc",
+  desc = "desc",
+  none = "none"
+}
+
 class DataTable {
   static MAX_ROWS_ON_PAGE = 50;
   private static headings = ["id", "firstName", "lastName", "email", "phone"];
@@ -20,10 +26,14 @@ class DataTable {
   private data: IDataItem[];
   private page: number;
   private container: Element;
+  private sortedBy: Map<string, orderDirection>;
 
   constructor(container: Element, dataSource: string) {
     this.container = container;
     this.page = 0;
+    this.sortedBy = new Map(<[string, orderDirection][]>DataTable.headings.map(
+      item => [item, orderDirection.none]
+    ));
 
     this.renderLoading();
     fetch(dataSource)
@@ -88,11 +98,51 @@ class DataTable {
     for (let heading of DataTable.headings) {
       const th = document.createElement("th");
       th.innerText = heading;
+
+      const sortState = this.sortedBy.get(heading) || orderDirection.none;
+      const sortButton = document.createElement("button");
+      sortButton.setAttribute("class", "datatable__sort-button");
+
+      if (sortState === orderDirection.desc) {
+        sortButton.innerText = "↓";
+        sortButton.setAttribute(
+          "aria-label",
+          `sort by ${heading} in ascending} order`
+        );
+        th.setAttribute("aria-sort", `descending`);
+      } else if (sortState === orderDirection.asc) {
+        sortButton.innerText = "↑";
+        sortButton.setAttribute(
+          "aria-label",
+          `sort by ${heading} in descending} order`
+        );
+        th.setAttribute("aria-sort", `ascending`);
+      } else {
+        sortButton.innerText = "↕";
+        sortButton.setAttribute(
+          "aria-label",
+          `sort by ${heading} in ascending} order`
+        );
+        th.setAttribute("aria-sort", `none `);
+      }
+
+      sortButton.addEventListener("click", () => {
+        this.sortData(
+          heading,
+          sortState === orderDirection.asc
+            ? orderDirection.desc
+            : orderDirection.asc
+        );
+      });
+
+      th.appendChild(sortButton);
+
       thead.appendChild(th);
     }
 
     return thead;
   }
+
   private getFooter(): Element {
     const tfoot = document.createElement("tfoot");
     tfoot.setAttribute("class", "datatable__tfoot");
@@ -147,5 +197,30 @@ class DataTable {
     nav.appendChild(ul);
 
     return nav;
+  }
+
+  private sortData(parameter: string, order: orderDirection) {
+    if (DataTable.headings.indexOf(parameter) === -1) return;
+
+    this.renderLoading();
+
+    if (order === orderDirection.asc) {
+      this.data = this.data.sort((a, b) => {
+        if (a[parameter] < b[parameter]) return 1;
+        if (a[parameter] > b[parameter]) return -1;
+        return 0;
+      });
+    } else if (order === orderDirection.desc) {
+      this.data = this.data.sort((a, b) => {
+        if (a[parameter] < b[parameter]) return -1;
+        if (a[parameter] > b[parameter]) return 1;
+        return 0;
+      });
+    }
+
+    this.page = 0;
+    this.sortedBy.set(parameter, order);
+
+    this.renderTable();
   }
 }

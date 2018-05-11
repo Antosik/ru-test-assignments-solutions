@@ -1,101 +1,142 @@
-var DataTable = /** @class */ (function () {
-    function DataTable(container, dataSource) {
-        var _this = this;
+class DataTable {
+    constructor(container, dataSource) {
         this.container = container;
         this.page = 0;
+        this.sortedBy = new Map(DataTable.headings.map(item => [item, "none" /* none */]));
         this.renderLoading();
         fetch(dataSource)
-            .then(function (response) { return response.json(); })
-            .then(function (response) {
-            _this.data = response;
-            _this.renderTable();
+            .then(response => response.json())
+            .then(response => {
+            this.data = response;
+            this.renderTable();
         });
     }
-    DataTable.prototype.renderLoading = function () {
+    renderLoading() {
         this.container.innerHTML = "";
-        var div = document.createElement("div");
+        const div = document.createElement("div");
         div.setAttribute("class", "loader");
         div.innerText = "Loading...";
         this.container.appendChild(div);
-    };
-    DataTable.prototype.renderTable = function () {
+    }
+    renderTable() {
         this.container.innerHTML = "";
-        var table = document.createElement("table");
+        const table = document.createElement("table");
         table.setAttribute("class", "datatable");
-        var heading = this.getHeading();
+        const heading = this.getHeading();
         table.appendChild(heading);
-        var tbody = document.createElement("tbody");
+        const tbody = document.createElement("tbody");
         tbody.setAttribute("class", "datatable__body");
-        var data = this.data.slice(this.page * DataTable.MAX_ROWS_ON_PAGE, (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE);
-        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-            var dataItem = data_1[_i];
-            var tr = document.createElement("tr");
-            for (var _a = 0, _b = DataTable.headings; _a < _b.length; _a++) {
-                var heading_1 = _b[_a];
-                var td = document.createElement("td");
-                td.innerText = dataItem[heading_1];
+        const data = this.data.slice(this.page * DataTable.MAX_ROWS_ON_PAGE, (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE);
+        for (let dataItem of data) {
+            const tr = document.createElement("tr");
+            for (let heading of DataTable.headings) {
+                const td = document.createElement("td");
+                td.innerText = dataItem[heading];
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
         }
         table.appendChild(tbody);
-        var footer = this.getFooter();
+        const footer = this.getFooter();
         table.appendChild(footer);
         this.container.appendChild(table);
-    };
-    DataTable.prototype.getHeading = function () {
-        var thead = document.createElement("thead");
+    }
+    getHeading() {
+        const thead = document.createElement("thead");
         thead.setAttribute("class", "datatable__head");
-        for (var _i = 0, _a = DataTable.headings; _i < _a.length; _i++) {
-            var heading = _a[_i];
-            var th = document.createElement("th");
+        for (let heading of DataTable.headings) {
+            const th = document.createElement("th");
             th.innerText = heading;
+            const sortState = this.sortedBy.get(heading) || "none" /* none */;
+            const sortButton = document.createElement("button");
+            sortButton.setAttribute("class", "datatable__sort-button");
+            if (sortState === "desc" /* desc */) {
+                sortButton.innerText = "↓";
+                sortButton.setAttribute("aria-label", `sort by ${heading} in ascending} order`);
+                th.setAttribute("aria-sort", `descending`);
+            }
+            else if (sortState === "asc" /* asc */) {
+                sortButton.innerText = "↑";
+                sortButton.setAttribute("aria-label", `sort by ${heading} in descending} order`);
+                th.setAttribute("aria-sort", `ascending`);
+            }
+            else {
+                sortButton.innerText = "↕";
+                sortButton.setAttribute("aria-label", `sort by ${heading} in ascending} order`);
+                th.setAttribute("aria-sort", `none `);
+            }
+            sortButton.addEventListener("click", () => {
+                this.sortData(heading, sortState === "asc" /* asc */
+                    ? "desc" /* desc */
+                    : "asc" /* asc */);
+            });
+            th.appendChild(sortButton);
             thead.appendChild(th);
         }
         return thead;
-    };
-    DataTable.prototype.getFooter = function () {
-        var tfoot = document.createElement("tfoot");
+    }
+    getFooter() {
+        const tfoot = document.createElement("tfoot");
         tfoot.setAttribute("class", "datatable__tfoot");
-        var row = document.createElement("tr");
-        var cell = document.createElement("td");
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
         cell.setAttribute("colspan", DataTable.headings.length.toString());
-        var pagination = this.getPagination();
+        const pagination = this.getPagination();
         cell.appendChild(pagination);
         row.appendChild(cell);
         tfoot.appendChild(row);
         return tfoot;
-    };
-    DataTable.prototype.getPagination = function () {
-        var _this = this;
-        var count = Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
-        var nav = document.createElement("nav");
+    }
+    getPagination() {
+        const count = Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
+        const nav = document.createElement("nav");
         nav.setAttribute("class", "datatable__pagination");
-        var ul = document.createElement("ul");
-        var _loop_1 = function (i) {
-            var isCurrentPage = i === this_1.page;
-            var li = document.createElement("li");
+        const ul = document.createElement("ul");
+        for (let i = 0; i < count; i++) {
+            const isCurrentPage = i === this.page;
+            const li = document.createElement("li");
             li.setAttribute("class", "datatable__pagination__item");
-            var button = document.createElement("button");
+            const button = document.createElement("button");
             button.setAttribute("type", "button");
-            button.setAttribute("aria-label", isCurrentPage ? "Page " + (i + 1) + ", current page" : "Go to page " + (i + 1));
+            button.setAttribute("aria-label", isCurrentPage ? `Page ${i + 1}, current page` : `Go to page ${i + 1}`);
             button.setAttribute("aria-current", String(isCurrentPage));
-            button.addEventListener("click", function () {
-                _this.page = i;
-                _this.renderTable();
+            button.addEventListener("click", () => {
+                this.page = i;
+                this.renderTable();
             });
             button.innerText = (i + 1).toString();
             li.appendChild(button);
             ul.appendChild(li);
-        };
-        var this_1 = this;
-        for (var i = 0; i < count; i++) {
-            _loop_1(i);
         }
         nav.appendChild(ul);
         return nav;
-    };
-    DataTable.MAX_ROWS_ON_PAGE = 50;
-    DataTable.headings = ["id", "firstName", "lastName", "email", "phone"];
-    return DataTable;
-}());
+    }
+    sortData(parameter, order) {
+        if (DataTable.headings.indexOf(parameter) === -1)
+            return;
+        this.renderLoading();
+        if (order === "asc" /* asc */) {
+            this.data = this.data.sort((a, b) => {
+                if (a[parameter] < b[parameter])
+                    return 1;
+                if (a[parameter] > b[parameter])
+                    return -1;
+                return 0;
+            });
+        }
+        else if (order === "desc" /* desc */) {
+            this.data = this.data.sort((a, b) => {
+                if (a[parameter] < b[parameter])
+                    return -1;
+                if (a[parameter] > b[parameter])
+                    return 1;
+                return 0;
+            });
+        }
+        this.page = 0;
+        this.sortedBy.set(parameter, order);
+        this.renderTable();
+    }
+}
+DataTable.MAX_ROWS_ON_PAGE = 50;
+DataTable.headings = ["id", "firstName", "lastName", "email", "phone"];

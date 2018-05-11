@@ -62,6 +62,15 @@
   border-bottom: 2px solid #ddd;
 }
 
+.datatable__sort-button {
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 2px 4px;
+  border: 1px solid #999;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
 .datatable__pagination {
   text-align: center;
   width: 100%;
