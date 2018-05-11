@@ -39,14 +39,39 @@ class DataTable {
     this.filteredBy = new Map(<[string, string][]>DataTable.headings.map(
       item => [item, ""]
     ));
+    this.filteredData = [];
 
+    this.initTable();
     this.renderLoading();
+
     fetch(dataSource)
       .then(response => response.json())
       .then(response => {
         this.data = response;
+        this.unblockAfterLoading();
         this.renderTable();
       });
+  }
+
+  private initTable() {
+    this.container.innerHTML = "";
+
+    const heading = this.getHeader();
+    const tbody = DataTable.createElement("tbody", {
+      class: "datatable__body"
+    });
+    const table = DataTable.createElement("table", { class: "datatable" }, [
+      heading,
+      tbody
+    ]);
+
+    this.container.appendChild(table);
+  }
+
+  private unblockAfterLoading() {
+    this.container
+      .querySelectorAll("input, button")
+      .forEach(element => element.removeAttribute("disabled"));
   }
 
   // Sort data
@@ -76,44 +101,42 @@ class DataTable {
   }
 
   // Filter data
-  private filterData(parameter: string, value: string) {
-    if (DataTable.headings.indexOf(parameter) === -1) return;
+  private filterData() {
+    let filteredData = this.data.slice(0);
 
-    this.filteredData = this.data.slice(0).filter(
-      dataItem =>
-        dataItem[parameter]
-          .toString()
-          .toLowerCase()
-          .indexOf(value) >= 0
-    );
-    this.filteredBy.set(parameter, value);
+    for (let [parameter, value] of this.filteredBy.entries()) {
+      if (!value) continue;
+      filteredData = filteredData.filter(
+        dataItem =>
+          dataItem[parameter]
+            .toString()
+            .toLowerCase()
+            .indexOf(value) >= 0
+      );
+    }
 
     this.page = 0;
+    this.filteredData = filteredData || [];
 
     this.renderTable();
   }
 
   private renderLoading() {
-    this.container.innerHTML = "";
+    const body = this.container.querySelector(".datatable__body");
 
-    const div = document.createElement("div");
-    div.setAttribute("class", "loader");
-    div.innerText = "Loading...";
+    body.innerHTML = "";
 
-    this.container.appendChild(div);
+    const loadingDiv = DataTable.createElement("div", { class: "loader" });
+    loadingDiv.innerText = "Loading...";
+
+    body.appendChild(loadingDiv);
   }
 
   public renderTable() {
-    this.container.innerHTML = "";
+    const table = this.container.querySelector(".datatable");
 
-    const table = document.createElement("table");
-    table.setAttribute("class", "datatable");
-
-    const heading = this.getHeader();
-    table.appendChild(heading);
-
-    const tbody = document.createElement("tbody");
-    tbody.setAttribute("class", "datatable__body");
+    const tbody = this.container.querySelector(".datatable__body");
+    tbody.innerHTML = "";
 
     const data =
       Array.from(this.filteredBy.values()).filter(el => Boolean(el)).length > 0
@@ -138,8 +161,8 @@ class DataTable {
       tbody.appendChild(tr);
     }
 
-    table.appendChild(tbody);
-
+    if (document.querySelector(".datatable__tfoot"))
+      table.removeChild(document.querySelector(".datatable__tfoot"));
     const footer = this.getFooter();
     table.appendChild(footer);
 
@@ -147,109 +170,96 @@ class DataTable {
   }
 
   private getHeader(): Element {
-    const thead = document.createElement("thead");
-    thead.setAttribute("class", "datatable__head");
-
     const headingRow = this.getHeading();
     const filteringRow = this.getFilters();
 
-    thead.appendChild(headingRow);
-    thead.appendChild(filteringRow);
-
-    return thead;
+    return DataTable.createElement("thead", { class: "datatable__head" }, [
+      headingRow,
+      filteringRow
+    ]);
   }
 
   private getHeading(): Element {
-    const tr = document.createElement("tr");
-
-    for (let heading of DataTable.headings) {
-      const th = document.createElement("th");
+    const headingsTh: Element[] = DataTable.headings.map(heading => {
+      const th = DataTable.createElement("th", { "aria-sort": "none" });
       th.innerText = heading;
 
-      const sortState = this.sortedBy.get(heading) || orderDirection.none;
-      const sortButton = document.createElement("button");
-      sortButton.setAttribute("class", "datatable__sort-button");
-
-      if (sortState === orderDirection.desc) {
-        sortButton.innerText = "↓";
-        sortButton.setAttribute(
-          "aria-label",
-          `sort by ${heading} in ascending} order`
-        );
-        th.setAttribute("aria-sort", `descending`);
-      } else if (sortState === orderDirection.asc) {
-        sortButton.innerText = "↑";
-        sortButton.setAttribute(
-          "aria-label",
-          `sort by ${heading} in descending} order`
-        );
-        th.setAttribute("aria-sort", `ascending`);
-      } else {
-        sortButton.innerText = "↕";
-        sortButton.setAttribute(
-          "aria-label",
-          `sort by ${heading} in ascending} order`
-        );
-        th.setAttribute("aria-sort", `none `);
-      }
+      const sortButton = DataTable.createElement("button", {
+        class: "datatable__sort-button",
+        disabled: "disabled",
+        "aria-label": `sort by ${heading} in ascending} order`
+      });
+      sortButton.innerText = "↕";
 
       sortButton.addEventListener("click", () => {
+        const sortState = this.sortedBy.get(heading) || orderDirection.none;
+
         this.sortData(
           heading,
           sortState === orderDirection.asc
             ? orderDirection.desc
             : orderDirection.asc
         );
+
+        if (sortState !== orderDirection.asc) {
+          sortButton.innerText = "↑";
+          sortButton.setAttribute(
+            "aria-label",
+            `sort by ${heading} in ascending} order`
+          );
+          th.setAttribute("aria-sort", `ascending`);
+        } else {
+          sortButton.innerText = "↓";
+          sortButton.setAttribute(
+            "aria-label",
+            `sort by ${heading} in descending} order`
+          );
+          th.setAttribute("aria-sort", `descending`);
+        }
       });
 
       th.appendChild(sortButton);
 
-      tr.appendChild(th);
-    }
+      return th;
+    });
 
-    return tr;
+    return DataTable.createElement("tr", {}, headingsTh);
   }
 
   private getFilters(): Element {
-    const tr = document.createElement("tr");
-
-    for (let heading of DataTable.headings) {
-      const td = document.createElement("td");
-
-      const input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("placeholder", `Filter by ${heading}`);
-      input.setAttribute("value", this.filteredBy.get(heading));
-      input.addEventListener("input", e => {
-        this.filterData(heading, input.value);
+    const headingInputs: Element[] = DataTable.headings.map(heading => {
+      const input = DataTable.createElement("input", {
+        class: "datatable__filter-input",
+        type: "text",
+        disabled: "disabled",
+        placeholder: `Filter by ${heading}`,
+        value: this.filteredBy.get(heading)
+      }) as HTMLInputElement;
+      input.addEventListener("input", () => {
+        this.filteredBy.set(heading, input.value);
+        this.filterData();
+        input.focus();
       });
 
-      td.appendChild(input);
+      return DataTable.createElement("td", {}, [input]);
+    });
 
-      tr.appendChild(td);
-    }
-
-    return tr;
+    return DataTable.createElement("tr", {}, headingInputs);
   }
 
   private getFooter(): Element {
-    const tfoot = document.createElement("tfoot");
-    tfoot.setAttribute("class", "datatable__tfoot");
-
-    const row = document.createElement("tr");
-
-    const cell = document.createElement("td");
-    cell.setAttribute("colspan", DataTable.headings.length.toString());
-
     const pagination = this.getPagination();
 
-    cell.appendChild(pagination);
+    const cell = DataTable.createElement(
+      "td",
+      { colspan: DataTable.headings.length.toString() },
+      [pagination]
+    );
+    const row = DataTable.createElement("tr", {}, [cell]);
 
-    row.appendChild(cell);
-
-    tfoot.appendChild(row);
-
-    return tfoot;
+    return DataTable.createElement("tfoot", { class: "datatable__tfoot" }, [
+      row
+    ]);
   }
 
   private getPagination(): Element {
@@ -257,37 +267,55 @@ class DataTable {
       Array.from(this.filteredBy.values()).filter(el => Boolean(el)).length > 0
         ? Math.ceil(this.filteredData.length / DataTable.MAX_ROWS_ON_PAGE)
         : Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
-    const nav = document.createElement("nav");
-    nav.setAttribute("class", "datatable__pagination");
 
     const ul = document.createElement("ul");
 
     for (let i = 0; i < count; i++) {
       const isCurrentPage = i === this.page;
 
-      const li = document.createElement("li");
-      li.setAttribute("class", "datatable__pagination__item");
-
-      const button = document.createElement("button");
-      button.setAttribute("type", "button");
-      button.setAttribute(
-        "aria-label",
-        isCurrentPage ? `Page ${i + 1}, current page` : `Go to page ${i + 1}`
-      );
-      button.setAttribute("aria-current", String(isCurrentPage));
+      const button = DataTable.createElement("button", {
+        type: "button",
+        "aria-label": isCurrentPage
+          ? `Page ${i + 1}, current page`
+          : `Go to page ${i + 1}`,
+        "aria-current": String(isCurrentPage)
+      });
       button.addEventListener("click", () => {
         this.page = i;
         this.renderTable();
       });
       button.innerText = (i + 1).toString();
 
-      li.appendChild(button);
+      const li = DataTable.createElement(
+        "li",
+        {
+          class: "datatable__pagination__item"
+        },
+        [button]
+      );
 
       ul.appendChild(li);
     }
 
-    nav.appendChild(ul);
+    return DataTable.createElement(
+      "nav",
+      {
+        class: "datatable__pagination"
+      },
+      [ul]
+    );
+  }
 
-    return nav;
+  private static createElement(
+    tag: string,
+    attributes: any = {},
+    childrens: Element[] = []
+  ) {
+    const element = document.createElement(tag);
+    Object.keys(attributes).forEach(key =>
+      element.setAttribute(key, attributes[key])
+    );
+    childrens.forEach(child => element.appendChild(child));
+    return element;
   }
 }
