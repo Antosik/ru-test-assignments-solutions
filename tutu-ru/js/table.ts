@@ -24,22 +24,23 @@ class DataTable {
   private static headings = ["id", "firstName", "lastName", "email", "phone"];
 
   private data: IDataItem[];
-  private filteredData: IDataItem[];
-  private page: number;
+  private page: number = 0;
   private container: Element;
+
+  private isFiltered: boolean = false;
+  private filteredData: IDataItem[] = [];
   private sortedBy: Map<string, orderDirection>;
   private filteredBy: Map<string, string>;
 
   constructor(container: Element, dataSource: string) {
     this.container = container;
-    this.page = 0;
+
     this.sortedBy = new Map(<[string, orderDirection][]>DataTable.headings.map(
       item => [item, orderDirection.none]
     ));
     this.filteredBy = new Map(<[string, string][]>DataTable.headings.map(
       item => [item, ""]
     ));
-    this.filteredData = [];
 
     this.initTable();
     this.renderLoading();
@@ -86,12 +87,24 @@ class DataTable {
         if (a[parameter] > b[parameter]) return -1;
         return 0;
       });
+      if (this.isFiltered)
+        this.filteredData = this.filteredData.sort((a, b) => {
+          if (a[parameter] < b[parameter]) return 1;
+          if (a[parameter] > b[parameter]) return -1;
+          return 0;
+        });
     } else if (order === orderDirection.desc) {
       this.data = this.data.sort((a, b) => {
         if (a[parameter] < b[parameter]) return -1;
         if (a[parameter] > b[parameter]) return 1;
         return 0;
       });
+      if (this.isFiltered)
+        this.filteredData = this.filteredData.sort((a, b) => {
+          if (a[parameter] < b[parameter]) return -1;
+          if (a[parameter] > b[parameter]) return 1;
+          return 0;
+        });
     }
 
     this.page = 0;
@@ -102,6 +115,15 @@ class DataTable {
 
   // Filter data
   private filterData() {
+    if (!Array.from(this.filteredBy.values()).filter(Boolean).length) {
+      this.page = 0;
+      this.filteredData = [];
+      this.isFiltered = false;
+
+      this.renderTable();
+      return;
+    }
+
     let filteredData = this.data.slice(0);
 
     for (let [parameter, value] of this.filteredBy.entries()) {
@@ -117,6 +139,7 @@ class DataTable {
 
     this.page = 0;
     this.filteredData = filteredData || [];
+    this.isFiltered = true;
 
     this.renderTable();
   }
@@ -138,16 +161,15 @@ class DataTable {
     const tbody = this.container.querySelector(".datatable__body");
     tbody.innerHTML = "";
 
-    const data =
-      Array.from(this.filteredBy.values()).filter(el => Boolean(el)).length > 0
-        ? this.filteredData.slice(
-            this.page * DataTable.MAX_ROWS_ON_PAGE,
-            (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE
-          )
-        : this.data.slice(
-            this.page * DataTable.MAX_ROWS_ON_PAGE,
-            (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE
-          );
+    const data = this.isFiltered
+      ? this.filteredData.slice(
+          this.page * DataTable.MAX_ROWS_ON_PAGE,
+          (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE
+        )
+      : this.data.slice(
+          this.page * DataTable.MAX_ROWS_ON_PAGE,
+          (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE
+        );
 
     for (let dataItem of data) {
       const tr = document.createElement("tr");
@@ -263,10 +285,9 @@ class DataTable {
   }
 
   private getPagination(): Element {
-    const count =
-      Array.from(this.filteredBy.values()).filter(el => Boolean(el)).length > 0
-        ? Math.ceil(this.filteredData.length / DataTable.MAX_ROWS_ON_PAGE)
-        : Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
+    const count = this.isFiltered
+      ? Math.ceil(this.filteredData.length / DataTable.MAX_ROWS_ON_PAGE)
+      : Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
 
     const ul = document.createElement("ul");
 

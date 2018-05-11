@@ -1,10 +1,11 @@
 class DataTable {
     constructor(container, dataSource) {
-        this.container = container;
         this.page = 0;
+        this.isFiltered = false;
+        this.filteredData = [];
+        this.container = container;
         this.sortedBy = new Map(DataTable.headings.map(item => [item, "none" /* none */]));
         this.filteredBy = new Map(DataTable.headings.map(item => [item, ""]));
-        this.filteredData = [];
         this.initTable();
         this.renderLoading();
         fetch(dataSource)
@@ -45,6 +46,14 @@ class DataTable {
                     return -1;
                 return 0;
             });
+            if (this.isFiltered)
+                this.filteredData = this.filteredData.sort((a, b) => {
+                    if (a[parameter] < b[parameter])
+                        return 1;
+                    if (a[parameter] > b[parameter])
+                        return -1;
+                    return 0;
+                });
         }
         else if (order === "desc" /* desc */) {
             this.data = this.data.sort((a, b) => {
@@ -54,6 +63,14 @@ class DataTable {
                     return 1;
                 return 0;
             });
+            if (this.isFiltered)
+                this.filteredData = this.filteredData.sort((a, b) => {
+                    if (a[parameter] < b[parameter])
+                        return -1;
+                    if (a[parameter] > b[parameter])
+                        return 1;
+                    return 0;
+                });
         }
         this.page = 0;
         this.sortedBy.set(parameter, order);
@@ -61,6 +78,13 @@ class DataTable {
     }
     // Filter data
     filterData() {
+        if (!Array.from(this.filteredBy.values()).filter(Boolean).length) {
+            this.page = 0;
+            this.filteredData = [];
+            this.isFiltered = false;
+            this.renderTable();
+            return;
+        }
         let filteredData = this.data.slice(0);
         for (let [parameter, value] of this.filteredBy.entries()) {
             if (!value)
@@ -72,6 +96,7 @@ class DataTable {
         }
         this.page = 0;
         this.filteredData = filteredData || [];
+        this.isFiltered = true;
         this.renderTable();
     }
     renderLoading() {
@@ -85,7 +110,7 @@ class DataTable {
         const table = this.container.querySelector(".datatable");
         const tbody = this.container.querySelector(".datatable__body");
         tbody.innerHTML = "";
-        const data = Array.from(this.filteredBy.values()).filter(el => Boolean(el)).length > 0
+        const data = this.isFiltered
             ? this.filteredData.slice(this.page * DataTable.MAX_ROWS_ON_PAGE, (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE)
             : this.data.slice(this.page * DataTable.MAX_ROWS_ON_PAGE, (this.page + 1) * DataTable.MAX_ROWS_ON_PAGE);
         for (let dataItem of data) {
@@ -169,7 +194,7 @@ class DataTable {
         ]);
     }
     getPagination() {
-        const count = Array.from(this.filteredBy.values()).filter(el => Boolean(el)).length > 0
+        const count = this.isFiltered
             ? Math.ceil(this.filteredData.length / DataTable.MAX_ROWS_ON_PAGE)
             : Math.ceil(this.data.length / DataTable.MAX_ROWS_ON_PAGE);
         const ul = document.createElement("ul");
