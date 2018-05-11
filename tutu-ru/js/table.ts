@@ -80,9 +80,9 @@ class DataTable {
 
 
         for (let heading of DataTable.headings) {
-            const td = document.createElement("td");
-            td.innerText = heading;
-            thead.appendChild(td);
+            const th = document.createElement("th");
+            th.innerText = heading;
+            thead.appendChild(th);
         }
 
         return thead;

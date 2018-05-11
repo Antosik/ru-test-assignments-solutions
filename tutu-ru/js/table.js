@@ -46,9 +46,9 @@ var DataTable = /** @class */ (function () {
         thead.setAttribute("class", "datatable__head");
         for (var _i = 0, _a = DataTable.headings; _i < _a.length; _i++) {
             var heading = _a[_i];
-            var td = document.createElement("td");
-            td.innerText = heading;
-            thead.appendChild(td);
+            var th = document.createElement("th");
+            th.innerText = heading;
+            thead.appendChild(th);
         }
         return thead;
     };
