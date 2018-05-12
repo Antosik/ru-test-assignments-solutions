@@ -17,3 +17,8 @@
   * Front End
     * [Задание](https://github.com/tutu-ru/frontend-javascript-test)
     * [Решение](https://github.com/Antosik/ru-test-assignments-solutions/tree/master/tutu-ru) ([**Демо**](https://antosik.github.io/ru-test-assignments-solutions/tutu-ru/))
+
+* [Ostrovok.ru](https://ostrovok.ru/)
+  * Front End
+    * [Задание](https://github.com/ostrovok-team/code-challenge/tree/master/js)
+    * [Решение](https://github.com/Antosik/ru-test-assignments-solutions/tree/master/ostrovok) ([**Демо**](https://antosik.github.io/ru-test-assignments-solutions/ostrovok/))
