@@ -22,3 +22,8 @@
   * Front End
     * [Задание](https://github.com/ostrovok-team/code-challenge/tree/master/js)
     * [Решение](https://github.com/Antosik/ru-test-assignments-solutions/tree/master/ostrovok) ([**Демо**](https://antosik.github.io/ru-test-assignments-solutions/ostrovok/))
+
+* [Aviasales.ru](https://aviasales.ru/)
+  * Front End
+    * [Задание](https://github.com/KosyanMedia/test-tasks/tree/master/aviasales)
+    * [Решение](https://github.com/Antosik/aviasales-frontend-task) ([**Демо**](https://antosik.github.io/aviasales-frontend-task/))
